@@ -1,0 +1,404 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    @apply bg-body-background-color;
+    font-family: 'Poppins', sans-serif !important;
+}
+
+::-webkit-input-placeholder {
+    @apply text-xs;
+    @apply font-semibold;
+    color: #f0eded;
+}
+
+/* Start: Navbar */
+nav.main {
+    height: 70px;
+}
+
+nav .logo {
+    width: 250px;
+}
+
+nav .logo img {
+    width: 114px;
+}
+
+nav {
+    position: fixed;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0 1px 4px -1px rgb(0 0 0 / 15%);
+}
+
+nav .active {
+    fill: rgb(92, 157, 206);
+}
+
+/* End: Navbar */
+
+aside {
+    width: 250px;
+    @apply bg-white;
+    @apply to-white;
+    box-shadow: 0 1px 4px -1px rgb(0 0 0 / 15%);
+    height: 100vh;
+    padding: 12px 24px;
+    transition: all .3s linear;
+}
+
+aside.large.collapse {
+    width: 63px;
+}
+
+aside.small.collapse {
+    transform: translateX(-100%);
+}
+
+aside .menu-title {
+    color: rgba(26, 51, 83, .6);
+    font-size: 12px;
+    line-height: 1.5;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-top: 15px;
+    white-space: nowrap;
+}
+
+
+aside .logo img {
+    height: 100%;
+    width: 100px;
+}
+
+
+aside .menu .item {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+aside .menu .item a {
+    display: flex;
+}
+
+aside.collapse~.page {
+    margin-left: 70px;
+}
+
+@media screen and (max-width:896px) {
+    aside.collapse~.page {
+        margin-left: 0px;
+    }
+}
+
+
+/* Page */
+
+.page {
+    margin-left: 250px;
+}
+
+@media screen and (max-width: 896px) {
+    .page {
+        margin-left: 0;
+    }
+}
+
+
+/* Componenets */
+
+.search {
+    width: 200px;
+    padding: 6px 31px;
+    border-radius: 19px;
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid #f0eded;
+}
+
+.search-container .v-select {
+    min-width: 220px !important;
+    border-radius: 20px;
+    @apply text-sm px-3 min-w-fit;
+    @apply bg-gray-50
+}
+
+.search-container .v-select {
+    width: 200px;
+    border: 1px solid #f0eded;
+}
+
+.search-container .vs__dropdown-toggle {
+    border: none !important;
+}
+
+@media screen and (max-width: 1280px) {
+    .search {
+        width: 100%;
+        margin: 0 !important;
+    }
+}
+
+.btn {
+    padding: 0 23px;
+    height: 33px;
+    border-radius: 20px;
+}
+
+.btn .icon {
+    width: 16px;
+}
+
+/* Cards */
+.avatar {
+    width: 68px;
+    height: 68px;
+}
+
+/* Dropdown Menu */
+
+.dropdown {
+    min-width: 150px;
+}
+
+.dropdown.wide {
+    min-width: 272px;
+}
+
+.dropdown .avatar {
+    width: 30px;
+    height: 30px;
+    @apply rounded-full;
+}
+
+/* Transitions */
+.profile-enter-active
+.profile-leave-active {
+    transition: all 23.4s ease;
+}
+
+.profile-enter-from,
+.profile-leave-to {
+    top: 52px;
+}
+
+.profile-enter-to,
+.profile-leave-from {
+    top: 0;
+}
+
+.menu-enter-active,
+.menu-leave-active {
+    transition: all 0.2s ease;
+}
+
+.menu-enter-from,
+.menu-leave-to {
+    margin-top: 3rem;
+    opacity: 0;
+}
+
+.modal-enter-to,
+.modal-leave-from {
+    margin-top: 10rem;
+    opacity: 1;
+}
+
+
+.modal-enter-active,
+.modal-leave-active {
+    transition: all 0.2s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+    margin-top: 10rem;
+    opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: all 0.2s ease;
+}
+
+.fade-enter-to,
+.fade-leave-from {
+    opacity: 1;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+
+/* Auth */
+
+.auth {
+    background-image: url("../assets/img/layers/auth_layer.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.auth .panal {
+    width: 29.1%;
+}
+
+.auth .logo-small {
+    width: 50px;
+    margin-bottom: 20px;
+}
+
+/* Forms */
+
+.input {
+    @apply bg-gray-50 text-sm px-3 py-2 bg-gray-100 rounded-xl font-semibold outline-blue-600 border-none;
+}
+
+::placeholder,
+.placeholder {
+    @apply font-semibold text-xs;
+}
+
+.label {
+    @apply text-xs font-semibold block
+}
+
+.error {
+    @apply text-us text-red-700 font-semibold pt-1
+}
+
+/* Profile */
+
+.profile .banner {
+    width: 100%;
+    height: 50vh;
+    background: #30343F;
+    border-radius: 10px;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.user .container {
+    top: 266px;
+    position: absolute;
+}
+
+/* Cards */
+
+.card {
+    background: #fff;
+    width: 100%;
+    box-shadow: 3px 3px 9px #f1eeee;
+    border-radius: 5px;
+    border: 1px solid #f2f2f2;
+}
+
+/* Loader */
+.spinner {
+    -webkit-animation: rotate 2s linear infinite;
+    animation: rotate 2s linear infinite;
+    z-index: 2;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    right: 36%;
+}
+
+.spinner .path {
+    stroke: #93bfec;
+    stroke-linecap: round;
+    -webkit-animation: dash 1.5s ease-in-out infinite;
+    animation: dash 1.5s ease-in-out infinite;
+}
+
+.spinner {
+    animation: rotate 2s linear infinite;
+    z-index: 2;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -25px 0 0 -25px;
+    width: 92px;
+    height: 92px;
+}
+
+.path {
+    stroke: #fff;
+    stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite;
+}
+
+button:focus {
+    outline: none !important;
+}
+
+@keyframes rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes dash {
+    0% {
+        stroke-dasharray: 1, 150;
+        stroke-dashoffset: 0;
+    }
+
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -35;
+    }
+
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -124;
+    }
+}
+
+@-webkit-keyframes rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes dash {
+    0% {
+        stroke-dasharray: 1, 150;
+        stroke-dashoffset: 0;
+    }
+
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -35;
+    }
+
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -124;
+    }
+}
+
+@keyframes dash {
+    0% {
+        stroke-dasharray: 1, 150;
+        stroke-dashoffset: 0;
+    }
+
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -35;
+    }
+
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -124;
+    }
+}
