@@ -11,6 +11,16 @@ export const useGuardStore = defineStore('guard', {
        
     },
     actions: {
-       
+       hasPriviledges(name) {
+            if ( name == 'role' ) {
+                return this.priviledges.includes(7 || 8)
+            }
+
+            if ( name == 'colleges' ) {
+                return this.priviledges.some(x => x.id == 1 || x.id == 2 )
+            }
+
+            return true;
+       }
     }
 })

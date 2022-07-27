@@ -148,7 +148,6 @@ import PageSlotVue from '../../components/slots/PageSlot.vue'
 import { useAuthStore } from '../../stores/Auth';
 import AvatarModal from '../../components/modals/AvatarModal.vue'; 
 import CoverModel from '../../components/modals/CoverModel.vue';
-import * as Vibrant from 'node-vibrant'
 
 export default {
     components: {PageSlotVue,AvatarModal,CoverModel},

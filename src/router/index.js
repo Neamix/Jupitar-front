@@ -25,7 +25,7 @@ const router = createRouter({
       component: MainViewVue,
       children: mainRoutes
     },
-    { path: '/:pathMatch(.*)*', component: NotFoundViewVue }
+    { path: '/:pathMatch(.*)*', component: NotFoundViewVue ,name:"notFound"}
   ],
 });
 BeforeGuard(router);

@@ -15,13 +15,13 @@
                             <span class="title" v-if="collectionStore.menu">Monitoring</span>
                         </router-link>
                     </li>
-                    <li class="item py-2">
+                    <li class="item py-2" v-if="hasPriviledges('colleges')">
                         <router-link :to="{name: 'colleges'}">
                             <font-awesome-icon icon="user" class="icon pr-2"/>
                             <span class="title" v-if="collectionStore.menu">Colleges</span>
                         </router-link>
                     </li>
-                    <li class="item py-2" v-if="user.priviledges.includes(7)">
+                    <li class="item py-2">
                         <router-link :to="{name: 'home'}" @click="this.collectionStore.smallMenu = true">
                             <i class="fa-solid fa-dice-d20 pr-2"></i>
                             <span class="title" v-if="collectionStore.menu">Roles</span>
@@ -123,7 +123,7 @@
 
 <script>
 
-import { mapState, mapStores } from 'pinia';
+import { mapActions, mapState, mapStores } from 'pinia';
 import { useCollectionStore } from "@/stores/collection";
 import LogoComponents from './LogoComponents.vue';
 import { useAuthStore } from '../../stores/Auth';
@@ -136,11 +136,10 @@ export default {
         ...mapState(useGuardStore,['priviledges'])
     },
     methods: {
-        
+        ...mapActions(useGuardStore,['hasPriviledges'])
     },
     components: { LogoComponents },
     mounted() {
-        console.log(this.priviledges);
     }
 }
 </script>
