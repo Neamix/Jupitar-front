@@ -13,14 +13,13 @@ function BeforeGuard($router) {
                 } else {
                     await auth.getAuthIfExist().then((response) => {
                         auth.$state.user = response.data.data.me;
-                        guard.$state.priviledges = response.data.data.me.role.priviledges;
-                        auth.$state.fetch = false;
-                        if ( ! response.data.data.me ) {
+                        if ( ! auth.$state.user ) {
                             return router.push({name: 'login'});  
                         } 
-
+                        guard.$state.priviledges = response.data.data.me.role.priviledges;
+                        auth.$state.fetch = false;
                         if ( auth.$state.user.role) {
-                            // console.log(guard.$state.priviledges)
+                            console.log(auth.$state.user.role);
                             let hasPriviledge = guard.hasPriviledges(to.name);
                             
                             if ( ! hasPriviledge ) {
