@@ -2,6 +2,7 @@ import CollegesViewVue from "../views/Pages/CollegesView.vue";
 import HomeViewVue from "../views/Pages/HomeView.vue";
 import MonitoringViewVue from "../views/Pages/MonitoringView.vue";
 import ProfileViewVue from "../views/Pages/ProfileView.vue";
+import RoleViewVue from "../views/Pages/RolesView.vue";
 
 let teamRoutes = [
     {
@@ -28,6 +29,12 @@ let teamRoutes = [
         component: ProfileViewVue,
         meta: {requiredAuth: true,checkProfile: true}
     },
+    {
+        path: "/roles",
+        name: "roles",
+        component: RoleViewVue,
+        meta: {requiredAuth: true}
+    }
 ];
 
 export default teamRoutes;
