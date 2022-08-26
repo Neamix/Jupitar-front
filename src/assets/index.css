@@ -334,6 +334,16 @@ button:focus {
     outline: none !important;
 }
 
+.model_loader {
+    width: 40px;
+    height: 40px;
+    /* background: #fff; */
+    border-radius: 50%;
+    border: 3px solid #ccc;
+    border-top: 3px solid #fff;
+    animation: rotate 1.5s ease-in-out infinite;
+}
+
 @keyframes rotate {
     100% {
         transform: rotate(360deg);
@@ -401,4 +411,110 @@ button:focus {
         stroke-dasharray: 90, 150;
         stroke-dashoffset: -124;
     }
+}
+
+/* Switch */
+
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 24px;
+}
+  
+  /* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+  
+  /* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+  
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 17px;
+    width: 17px;
+    left: 4px;
+    bottom: 3.8px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+  
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(16px);
+    -ms-transform: translateX(16px);
+    transform: translateX(16px);
+}
+
+input:disabled + .slider::before {
+    background-color: #b0b0b0;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* scroll bar */
+
+/* width */
+::-webkit-scrollbar {
+    width: 3px;
+    border-radius: 20px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+background: #555;
+}
+
+/* Menus */
+
+.select_menu {
+    top: 31px;
+    width: 100%;
+    left: 0;
+    max-height: 114px;
+    overflow-y: scroll;
 }
