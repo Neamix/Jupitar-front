@@ -9,6 +9,7 @@
                     class="form-control block border-2 border-gray-10 w-full py-2 rounded-sm text-xs p-2 outline-0 focus:outline-2 outline-blue-500" 
                     placeholder="Enter your email"
                     v-model="payload.email"
+                    @keyup.enter="UserLogin()"
                     />
                 <p class="error">{{error.email}}</p>
             </div>
@@ -19,6 +20,7 @@
                     placeholder="Enter your password"
                     type="password"
                     v-model="payload.password"
+                    @keyup.enter="UserLogin()"
                     />
             </div>
             <button 
