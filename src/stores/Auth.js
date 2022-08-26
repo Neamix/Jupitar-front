@@ -17,11 +17,21 @@ function(response) {
 },
 function(error) {
     if (error.response.status == 401) {
-    self.$toaster.error("ERROR: Invalid token detected");
+        self.$toaster.error("ERROR: Invalid token detected");
         self.logout();
+    } else if (error.response.status == 503) {
+        let access_token = localStorage.getItem('auth_token');
+
+        if ( access_token ) {
+            localStorage.removeItem('auth_token');
+        }
+
+        window.location.href = '/login';
     }
-    throw new Error('Invalid token detected')
-    }
+
+    throw new Error('Invalid token detected');
+
+}
 );
 
 export const useAuthStore = defineStore('auth', {
@@ -44,6 +54,7 @@ export const useAuthStore = defineStore('auth', {
     },
     actions: {
         isAuthed() {
+            console.log(this.user)
             return this.user.id ? true : false;
         },
 
@@ -80,6 +91,7 @@ export const useAuthStore = defineStore('auth', {
                                   cover,
                                   role {
                                     name,
+                                    id,
                                     priviledges {
                                         id
                                     }
@@ -92,9 +104,7 @@ export const useAuthStore = defineStore('auth', {
                         let me = response.data.data.me;
 
                         if ( me ) {
-                            if ( me.role) {
-                                this.myPriviledges(me.role.priviledges);
-                            }
+                            this.user = me;
                         }
 
                         resolve(response)
@@ -261,8 +271,6 @@ export const useAuthStore = defineStore('auth', {
                       }
                     `
                 }
-            }).then((response) => {
-                console.log(response.data.data)
             })
         },
 
