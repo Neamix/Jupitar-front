@@ -3,6 +3,7 @@
         <div class="menus">
             <ul class="main">
                 <ul class="team-menu menu  mt-3">
+                    <h2 class=" font-semibold text-us text-gray-500 " >Team Managment</h2>
                     <li class="item py-2">
                         <router-link :to="{name: 'home'}">
                             <i class="fa-solid fa-gauge pr-2"></i>
@@ -22,26 +23,15 @@
                         </router-link>
                     </li>
                     <li class="item py-2">
-                        <router-link :to="{name: 'home'}" @click="this.collectionStore.smallMenu = true">
+                        <router-link :to="{name: 'roles'}" @click="this.collectionStore.smallMenu = true">
                             <i class="fa-solid fa-dice-d20 pr-2"></i>
                             <span class="title" v-if="collectionStore.menu">Roles</span>
-                        </router-link>
-                    </li> 
-                    <li class="item py-2">
-                        <router-link :to="{name: 'home'}" @click="this.collectionStore.smallMenu = true">
-                            <i class="fa-solid fa-layer-group pr-2"></i>
-                            <span class="title" v-if="collectionStore.menu">My team</span>
-                        </router-link>
-                    </li>
-                     <li class="item py-2">
-                        <router-link :to="{name: 'profile',params:{id: user.id}}" @click="this.collectionStore.smallMenu = true">
-                            <i class="fa-solid fa-address-card pr-2"></i>
-                            <span class="title" v-if="collectionStore.menu">My Profile</span>
                         </router-link>
                     </li> 
                 </ul>
                  <!-- Start:System Managment -->
                 <ul class="system-menu menu">
+                    <h2 class=" font-semibold text-us text-gray-500 mt-2" >User Managment</h2>
                     <li class="item py-2">
                         <router-link :to="{name: 'home'}" @click="this.collectionStore.smallMenu = true">
                             <i class="fa-solid fa-users-gear pr-2"></i>
@@ -52,6 +42,18 @@
                         <router-link :to="{name: 'home'}" @click="this.collectionStore.smallMenu = true">
                             <i class="fa-solid fa-code-pull-request pr-2"></i>
                             <span class="title" v-if="collectionStore.menu">Request</span>
+                        </router-link>
+                    </li> 
+                     <li class="item py-2">
+                        <router-link :to="{name: 'home'}" @click="this.collectionStore.smallMenu = true">
+                            <i class="fa-solid fa-layer-group pr-2"></i>
+                            <span class="title" v-if="collectionStore.menu">My team</span>
+                        </router-link>
+                    </li>
+                     <li class="item py-2">
+                        <router-link :to="{name: 'profile',params:{id: user.id}}" @click="this.collectionStore.smallMenu = true">
+                            <i class="fa-solid fa-address-card pr-2"></i>
+                            <span class="title" v-if="collectionStore.menu">My Profile</span>
                         </router-link>
                     </li> 
                 </ul>
