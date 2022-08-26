@@ -16,24 +16,22 @@
                             <div class="group p-1">
                                 <label class="label pb-1">College role</label>
                                 <div class="select" @click="dropdown.roleMenu =! dropdown.roleMenu ">
-                                    <div class="placeholder input w-full flex items-center">
+                                    <div class="placeholder input w-full flex items-center relative ">
                                         <span> Admin </span>
                                         <font-awesome-icon icon="chevron-down" class="ml-auto transition-all" :class="{'rotate-180': dropdown.roleMenu}" />
+                                        <transition 
+                                            enter-active-class="transform transition duration-500 ease-custom"
+                                            enter-class="-translate-y-1/2 scale-y-0 opacity-0"
+                                            enter-to-class="translate-y-0 scale-y-100 opacity-100"
+                                            leave-active-class="transform transition duration-300 ease-custom"
+                                            leave-class="translate-y-0 scale-y-100 opacity-100"
+                                            leave-to-class="-translate-y-1/2 scale-y-0 opacity-0">
+                                            <ul class="select_menu bg-gray-100 rounded-md mt-2 shadow-md absolute z-20 px-5 "
+                                                v-if="dropdown.roleMenu">
+                                                <li class="text-xs font-semibold p-2" v-for="role in roles" :key="role.id">{{ role.name }}</li>
+                                            </ul>
+                                        </transition>
                                     </div>
-                                    <transition 
-                                        enter-active-class="transform transition duration-500 ease-custom"
-                                        enter-class="-translate-y-1/2 scale-y-0 opacity-0"
-                                        enter-to-class="translate-y-0 scale-y-100 opacity-100"
-                                        leave-active-class="transform transition duration-300 ease-custom"
-                                        leave-class="translate-y-0 scale-y-100 opacity-100"
-                                        leave-to-class="-translate-y-1/2 scale-y-0 opacity-0">
-                                        <ul class="select_menu bg-gray-100 rounded-md mt-2 shadow-md"
-                                            v-if="dropdown.roleMenu">
-                                            <li class="text-xs font-semibold p-2">Admin</li>
-                                            <li class="text-xs font-semibold p-2">Modrator</li>
-                                            <li class="text-xs font-semibold p-2">Modrator</li>
-                                        </ul>
-                                    </transition>
                                 </div>
                             </div>
                             <div class="group p-1">
@@ -63,9 +61,11 @@
 <script>
 import { mapActions } from 'pinia';
 import { useAuthStore } from '../../stores/Auth';
+import { useGuardStore } from '../../stores/Guard';
 export default {
     data() {
         return {
+          roles: [],
           model: {
             college_invite_model: false
           },
@@ -87,6 +87,7 @@ export default {
     },
     methods: {
         ...mapActions(useAuthStore,['upsert']),
+        ...mapActions(useGuardStore,['getRolesList']),
         createUser() {
             this.loading.register = true;
             this.upsert(this.payload).then((response) => {
@@ -111,9 +112,10 @@ export default {
         }
     },
     mounted() {
-        setTimeout(() => {
+         this.getRolesList({'name':""}).then((response) => {
+            this.roles = response.data.data.roles.data;
             this.model.college_invite_model = true;
-        },100);
+        })
     }
 }
 </script>
