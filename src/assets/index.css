@@ -117,21 +117,9 @@ aside.collapse~.page {
     font-weight: 500;
     border: 1px solid #f0eded;
 }
-
-.search-container .v-select {
-    min-width: 220px !important;
-    border-radius: 20px;
-    @apply text-sm px-3 min-w-fit;
-    @apply bg-gray-50
-}
-
-.search-container .v-select {
-    width: 200px;
-    border: 1px solid #f0eded;
-}
-
-.search-container .vs__dropdown-toggle {
-    border: none !important;
+.search-container {
+    min-width: 200px;
+    z-index: 10000;
 }
 
 @media screen and (max-width: 1280px) {
@@ -517,4 +505,9 @@ background: #555;
     left: 0;
     max-height: 114px;
     overflow-y: scroll;
+}
+
+/* overview  */
+.overview  {
+    z-index: 10000;
 }
