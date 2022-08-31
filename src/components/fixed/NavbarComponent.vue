@@ -141,7 +141,6 @@
 
         watch: {
             user() {
-                console.log(this.user,'load')
             }
         },
 
@@ -157,10 +156,8 @@
 
                 if(this.myScreen < 768) {
                     this.smallMenu = !this.smallMenu;
-                    console.log(this.smallMenu);
                 }
 
-                console.log(this.myScreen);
             },
             toggleMenus(myKey) {
                 Object.keys(this.dropmenu).map((key,index) => {

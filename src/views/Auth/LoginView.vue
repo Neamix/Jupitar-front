@@ -88,7 +88,6 @@ export default ({
     },
 
     mounted() {
-        console.log(this.resetSuccessFlashMessage)
         if ( this.resetSuccessFlashMessage ) {
             this.$swal({
               text: 'Password has been changed',

@@ -45,9 +45,7 @@ export default {
                 if ( this.getPage == this.pages ) {
                     this.getPage = 1;
                 } else {
-                    console.log(this.getPage);
                     this.getPage = this.getPage + 1
-                    console.log(this.getPage);
                 }
             }
 

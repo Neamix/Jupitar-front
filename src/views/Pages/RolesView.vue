@@ -182,10 +182,8 @@ export default {
             this.role_loader = true;
             clearTimeout(this.sendSearchQuery);
             this.sendSearchQuery = setTimeout(() => {
-                console.log(this.search.name);
                 this.getRolesList(this.search).then((response) => {
                     this.roles = response.data.data.roles.data;
-                    console.log(this.roles);
                     this.role_loader = false;
                 });
             },1000);
@@ -202,7 +200,6 @@ export default {
             this.deleteRole(this.deleteRolePayload).then((response) => {
                 let errors = response.data.errors;
                 if ( errors ) {
-                    console.log(errors[0].extensions.validation['password'][0])
                     let password = errors[0].extensions.validation['password'] ?? null;
                     if (password) 
                         this.error.password = password[0];

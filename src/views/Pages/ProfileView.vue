@@ -195,7 +195,6 @@ export default {
     },
     mounted() {
         this.getProfile(this.$route.params.id).then((response) => {
-            console.log(response);
             this.userProfile = response.data.data.user;
             if (this.userProfile.id == this.user.id ) {
                 this.isMyProfile = true;
