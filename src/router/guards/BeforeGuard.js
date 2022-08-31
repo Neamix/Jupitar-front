@@ -19,7 +19,6 @@ function BeforeGuard($router) {
                         guard.$state.priviledges = response.data.data.me.role.priviledges;
                         auth.$state.fetch = false;
                         if ( auth.$state.user.role) {
-                            console.log(auth.$state.user.role);
                             let hasPriviledge = guard.hasPriviledges(to.name);
                             
                             if ( ! hasPriviledge ) {

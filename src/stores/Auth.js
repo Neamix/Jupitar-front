@@ -54,7 +54,6 @@ export const useAuthStore = defineStore('auth', {
     },
     actions: {
         isAuthed() {
-            console.log(this.user)
             return this.user.id ? true : false;
         },
 
@@ -139,23 +138,35 @@ export const useAuthStore = defineStore('auth', {
             })
         },
 
-        upsert(payload) {
+        upsert(payload,page = 1) {
             return axios({
                 method: "POST",
                 url: import.meta.env.VITE_APP_END_POINT+'/graphql',
-                headers: {"Content-Type": "application/json"},
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${this.auth_token}`
+                },
                 data: {
                     query: `
                     mutation {
                         upsert(input:{
                            email:"${payload.email}",
                            name:"${payload.name}",
-                           id: ${payload.id || null}
-                        }) {
-                           email,
-                           name,
+                           id: ${payload.id || null},
+                           role: ${payload.role_id}
+                        })  {
+                            status,
+                            users(page:${page}) {
+                                data {
+                                    name,
+                                    email,
+                                    id,
+                                    avatar,
+                                    active
+                                }
+                            }
                         }
-                      }
+                    }
                     `
                 }
             })
@@ -266,7 +277,11 @@ export const useAuthStore = defineStore('auth', {
                         user(id: ${id}) {
                             name,
                             email,
-                            id
+                            id,
+                            role {
+                                id,
+                                name
+                            }
                          }
                       }
                     `
@@ -274,7 +289,7 @@ export const useAuthStore = defineStore('auth', {
             })
         },
 
-        getUserList(payload) {
+        getUserList(payload,page = 1) {
             return axios({
                 method: "POST",
                 url: import.meta.env.VITE_APP_END_POINT+'/graphql',
@@ -285,8 +300,9 @@ export const useAuthStore = defineStore('auth', {
                 data: {
                     query: `
                     query {
-                        users(page:${payload.page},input:{
-                            name: "${payload.name}"
+                        users(page:${page},input:{
+                            name: "${payload.name}",
+                            role: ${payload.role}
                         }) {
                             paginatorInfo {
                                 lastPage
@@ -340,7 +356,7 @@ export const useAuthStore = defineStore('auth', {
             })
         },
 
-        deleteUser(deleteUserPayload) {
+        deleteUser(deleteUserPayload,page) {
             let auth_token =  localStorage.getItem('auth_token');
             return axios({
                 method: "POST",
@@ -356,7 +372,16 @@ export const useAuthStore = defineStore('auth', {
                             id: ${deleteUserPayload.id},
                             password: "${deleteUserPayload.password}"
                         }) {
-                           id
+                            status,
+                            users(page:${page}) {
+                                data {
+                                    name,
+                                    email,
+                                    id,
+                                    active,
+                                    avatar
+                                },
+                            }
                         }
                     }
                     `
@@ -364,7 +389,7 @@ export const useAuthStore = defineStore('auth', {
             })
         },
 
-        downloadUsersFile(type)
+        downloadUsersFile(type,search)
         {
             let auth_token =  localStorage.getItem('auth_token');
             return axios({
@@ -375,11 +400,15 @@ export const useAuthStore = defineStore('auth', {
                 },
                 data: {
                     query: `
-                        query {
-                            userExport(type: "${type}")
+                        query userExport($search: UserSearchInput) {
+                            userExport(type: "${type}",search:$search)
                         }
-                    `
-                }
+                    `,
+                    variables: {
+                        search: search,
+                    }
+                },
+                
             }).then((response) => {
                 const link = document.createElement('a');
                 const file = response.data.data.userExport;
