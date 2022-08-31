@@ -26,9 +26,9 @@
                         <div class="grid grid-cols-2 mt-3">
                             <div class="group p-1">
                                 <label class="label pb-1">College role</label>
-                                <div class="select" @click="dropdown.roleMenu =! dropdown.roleMenu ">
+                                <div class="select relative" @click="dropdown.roleMenu =! dropdown.roleMenu ">
                                     <div class="placeholder input w-full flex items-center">
-                                        <span> Admin </span>
+                                        <span> {{ payload.role_name }} </span>
                                         <font-awesome-icon icon="chevron-down" class="ml-auto transition-all" :class="{'rotate-180': dropdown.roleMenu}" />
                                     </div>
                                     <transition 
@@ -38,11 +38,9 @@
                                         leave-active-class="transform transition duration-300 ease-custom"
                                         leave-class="translate-y-0 scale-y-100 opacity-100"
                                         leave-to-class="-translate-y-1/2 scale-y-0 opacity-0">
-                                        <ul class="select_menu bg-gray-100 rounded-md mt-2 shadow-md"
+                                        <ul class="select_menu bg-gray-100 rounded-md mt-2 shadow-md absolute z-1000"
                                             v-if="dropdown.roleMenu">
-                                            <li class="text-xs font-semibold p-2">Admin</li>
-                                            <li class="text-xs font-semibold p-2">Modrator</li>
-                                            <li class="text-xs font-semibold p-2">Modrator</li>
+                                            <li class="text-xs font-semibold p-2 cursor-pointer hover:bg-blue-500 hover:text-white" v-for="role in roles" :key="role.id" @click="payload.role_name=role.name;payload.role_id=role.id">{{ role.name }}</li>
                                         </ul>
                                     </transition>
                                 </div>
@@ -74,21 +72,27 @@
 <script>
 import { mapActions, mapState } from 'pinia';
 import { useAuthStore } from '../../stores/Auth';
+import { useGuardStore } from '../../stores/Guard';
 export default {
     props: {
-        user_id: Number
+        user_id: Number,
+        page: Number
     },
     data() {
         return {
           model: {
             user_update: false
           },
+          roles: [],
           loading: {
             update: false
           },
           payload: {
             email: "",
-            name: ""
+            name: "",
+            role_name: "",
+            role_id: "",
+            id: ""
           },
           error: {
             email: "",
@@ -101,10 +105,10 @@ export default {
     },
     methods: {
         ...mapActions(useAuthStore,['getUserData','upsert']),
+        ...mapActions(useGuardStore,['getRolesList']),
         updateUser() {
             this.loading.update = true;
-            this.upsert(this.payload).then((response) => {
-                console.log(response);
+            this.upsert(this.payload,this.page).then((response) => {
                 this.loading.update = false;
                 let errors = response.data.errors;
                 
@@ -117,7 +121,7 @@ export default {
                         this.error.name = errors[0].extensions.validation['input.name'][0];
                     }
                 } else {
-                    this.$emit('updated',this.payload);
+                    this.$emit('updated',response);
                 }
                 
             })
@@ -133,10 +137,12 @@ export default {
             this.payload.id = data.id,
             this.payload.name = data.name,
             this.payload.email = data.email
+            this.payload.role_name = data.role.name;
+            this.payload.role_id = data.role.id;
+            this.getRolesList({'name':""}).then((response) => {
+                this.roles = response.data.data.roles.data;
+            })
         });
-        setTimeout(() => {
-            this.model.user_update = true;
-        },100);
     }
 }
 </script>
