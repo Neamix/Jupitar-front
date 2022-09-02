@@ -146,8 +146,8 @@
 import { mapActions, mapState } from 'pinia';
 import PageSlotVue from '../../components/slots/PageSlot.vue'
 import { useAuthStore } from '../../stores/Auth';
-import AvatarModal from '../../components/modals/AvatarModal.vue'; 
-import CoverModel from '../../components/modals/CoverModel.vue';
+import AvatarModal from '../../components/modals/ProfileModels/AvatarModal.vue'; 
+import CoverModel from '../../components/modals/ProfileModels/CoverModel.vue';
 
 export default {
     components: {PageSlotVue,AvatarModal,CoverModel},

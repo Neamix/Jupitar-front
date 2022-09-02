@@ -241,7 +241,7 @@ export const useAuthStore = defineStore('auth', {
             })
         },
 
-        toggleUserActive(id) {
+        toggleUserActive(payload,page) {
             let auth_token =  localStorage.getItem('auth_token');
             return axios({
                 method: "POST",
@@ -253,10 +253,18 @@ export const useAuthStore = defineStore('auth', {
                 data: {
                     query: `
                     mutation {
-                        toggleUserActivate(id:${id}) {
-                          id
-                          active
-                       }
+                        toggleUserActivate(id:${payload.id}) {
+                           status,
+                            users(page:${page}) {
+                                data {
+                                    name,
+                                    email,
+                                    id,
+                                    active,
+                                    avatar
+                                },
+                            }
+                        }
                     }
                     `
                 }

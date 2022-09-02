@@ -80,23 +80,14 @@
                                 </div>
                                 <router-link :to="{ name: 'profile', params: { id: user.id }}" class="absolute top-0 left-0 w-full h-full"></router-link>
                                 <div class="ml-auto px-2 z-1000 mt-4 flex">
-                                    <span class="px-1 text-us text-zinc-700 cursor-pointer" @click="toggleUserActivateState(user.id);suspendID = user.id">
-                                        <i class="fa-solid fa-lock" @click="loading.suspending = user.id"></i>
-                                        <svg v-if="loading.suspending == user.id"
-                                            version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                            x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve" width="20px" class=" fill-black relative" style="top:-3px">
-                                            <path 
-                                            d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
-                                            <animateTransform attributeName="transform" attributeType="XML" type="rotate" dur="1s" from="0 50 50"
-                                                to="360 50 50" repeatCount="indefinite" />
-                                            </path>
-                                        </svg>
+                                    <span class="px-1 text-us text-zinc-700 cursor-pointer " @click="suspendUserPayload.id = user.id;model.suspendModel = true">
+                                        <i class="fa-solid fa-lock hover:text-blue-500" ></i>
                                     </span>
                                     <span class="px-1 text-us text-zinc-700 cursor-pointer" @click="deleteUserPayload.id = user.id;model.deleteModel = true ;">
-                                        <i class="fa-solid fa-trash"></i>
+                                        <i class="fa-solid fa-trash hover:text-blue-500"></i>
                                     </span>
-                                    <span class="px-1 text-us text-zinc-700 cursor-pointer" @click="editUserPayload.id = user.id;model.editModel = true">
-                                        <i class="fa-solid fa-pen"></i>
+                                    <span class="px-1 text-us text-zinc-700 cursor-pointer  hover:text-blue-500" @click="editUserPayload.id = user.id;model.editModel = true">
+                                        <i class="fa-solid fa-pen  hover:text-blue-500"></i>
                                     </span>
                                 </div>
                             </div>
@@ -126,6 +117,9 @@
             <Transition name="fade">
                 <DeleteCollegeModel v-if="model.deleteModel" :user_id="deleteUserPayload.id" :page="current_page" @deleted="removedUser"></DeleteCollegeModel>
             </Transition>
+            <Transition name="fade">
+                <SuspendedCollegeModel v-if="model.suspendModel" :user_id="suspendUserPayload.id" :page="current_page" @suspended="suspendedUser"></SuspendedCollegeModel>
+            </Transition>
             
         </PageSlot>
     </Transition>
@@ -137,13 +131,14 @@ import PageSlot from "@/components/slots/PageSlot.vue";
 import { mapActions } from 'pinia';
 import { useAuthStore } from '../../stores/Auth';
 import PaginationComponent from "../../components/fixed/PaginationComponent.vue";
-import AddCollegeModel from "../../components/modals/AddCollegeModel.vue";
-import EditColleageModel from "../../components/modals/EditColleageModel.vue";
+import AddCollegeModel from "../../components/modals/CollegesModels/AddCollegeModel.vue";
+import EditColleageModel from "../../components/modals/CollegesModels/EditColleageModel.vue";
 import { useGuardStore } from '../../stores/Guard';
-import DeleteCollegeModel from "../../components/modals/DeleteCollegeModel.vue";
+import DeleteCollegeModel from "../../components/modals/CollegesModels/DeleteCollegeModel.vue";
+import SuspendedCollegeModel from "../../components/modals/CollegesModels/SuspendedCollegeModel.vue";
 
 export default {
-    components: { PageSlot, PaginationComponent, AddCollegeModel, EditColleageModel, DeleteCollegeModel },
+    components: { PageSlot, PaginationComponent, AddCollegeModel, EditColleageModel, DeleteCollegeModel, SuspendedCollegeModel },
     data() {
         return {
             url: import.meta.env.VITE_APP_END_POINT + '/',
@@ -157,6 +152,7 @@ export default {
                 college_invite_model: false,
                 deleteModel: false,
                 editModel: false,
+                suspendModel: false,
                 placeholder_role: 'All Roles'
             },
             users: [
@@ -176,6 +172,10 @@ export default {
 
             deleteUserPayload: {
                 id: null,
+            },
+
+            suspendUserPayload: {
+                id: null
             },
 
             editUserPayload: {
@@ -263,6 +263,14 @@ export default {
             if ( $model == 'update_model' ) {
                 this.model.editModel = false;
             }
+
+            if ( $model == 'delete_model' ) {
+                this.model.deleteModel = false;
+            }
+
+            if ( $model == 'suspend_model' ) {
+                this.model.suspendModel = false
+            }
         },
 
         registerNewUser($user)
@@ -281,6 +289,12 @@ export default {
 
             let data = e.target.getAttribute('data-menu');
             if ( data != 'roleMenu' ) this.dropDowns.roleMenu = false;
+        },
+
+        suspendedUser(response) 
+        {
+            this.model.suspendModel = false;
+            this.users = response.data.data.toggleUserActivate.users.data;
         }
     },
 

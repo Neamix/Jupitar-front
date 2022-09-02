@@ -56,8 +56,8 @@
 
 <script>
 import { mapActions } from 'pinia';
-import { useGuardStore } from '../../stores/Guard';
-import { useCollectionStore } from '../../stores/collection';
+import { useGuardStore } from '../../../stores/Guard';
+import { useCollectionStore } from '../../../stores/collection';
 export default {
     data() {
         return {

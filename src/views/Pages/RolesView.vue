@@ -96,10 +96,10 @@
 import PageSlot from "@/components/slots/PageSlot.vue";
 import { mapActions } from 'pinia';
 import PaginationComponent from "../../components/fixed/PaginationComponent.vue";
-import EditColleageModel from "../../components/modals/EditColleageModel.vue";
+import EditColleageModel from "../../components/modals/CollegesModels/EditColleageModel.vue";
 import { useGuardStore } from "../../stores/Guard";
-import AddNewRoleModal from "../../components/modals/AddNewRoleModal.vue";
-import EditRoleModal from "../../components/modals/EditRoleModal.vue";
+import AddNewRoleModal from "../../components/modals/RoleModels/AddNewRoleModal.vue";
+import EditRoleModal from "../../components/modals/RoleModels/EditRoleModal.vue";
 
 export default {
     components: { PageSlot, PaginationComponent, EditColleageModel, AddNewRoleModal,EditRoleModal },

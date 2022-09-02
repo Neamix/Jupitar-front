@@ -43,7 +43,7 @@ import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginImageCrop from 'filepond-plugin-image-crop';
 import { mapActions } from 'pinia';
-import { useAuthStore } from '../../stores/Auth';
+import { useAuthStore } from '../../../stores/Auth';
 
 const FilePond = vueFilePond(
   FilePondPluginFileValidateType,

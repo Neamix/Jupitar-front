@@ -60,8 +60,8 @@
 
 <script>
 import { mapActions } from 'pinia';
-import { useAuthStore } from '../../stores/Auth';
-import { useGuardStore } from '../../stores/Guard';
+import { useAuthStore } from '../../../stores/Auth';
+import { useGuardStore } from '../../../stores/Guard';
 export default {
     props: {
         search: Array

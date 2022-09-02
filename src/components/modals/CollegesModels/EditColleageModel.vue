@@ -71,8 +71,8 @@
 
 <script>
 import { mapActions, mapState } from 'pinia';
-import { useAuthStore } from '../../stores/Auth';
-import { useGuardStore } from '../../stores/Guard';
+import { useAuthStore } from '../../../stores/Auth';
+import { useGuardStore } from '../../../stores/Guard';
 export default {
     props: {
         user_id: Number,
