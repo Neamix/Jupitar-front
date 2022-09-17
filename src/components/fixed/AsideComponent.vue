@@ -33,21 +33,21 @@
                 <ul class="system-menu menu">
                     <h2 class=" font-semibold text-us text-gray-500 mt-2" >User Managment</h2>
                     <li class="item py-2">
-                        <router-link :to="{name: 'home'}" @click="this.collectionStore.smallMenu = true">
+                        <router-link :to="{name: 'status'}" @click="this.collectionStore.smallMenu = true">
                             <i class="fa-solid fa-users-gear pr-2"></i>
                             <span class="title" v-if="collectionStore.menu">Status</span>
                         </router-link>
                     </li> 
                     <li class="item py-2">
-                        <router-link :to="{name: 'home'}" @click="this.collectionStore.smallMenu = true">
+                        <router-link :to="{name: 'requests'}" @click="this.collectionStore.smallMenu = true">
                             <i class="fa-solid fa-code-pull-request pr-2"></i>
                             <span class="title" v-if="collectionStore.menu">Request</span>
                         </router-link>
                     </li> 
                      <li class="item py-2">
-                        <router-link :to="{name: 'home'}" @click="this.collectionStore.smallMenu = true">
+                        <router-link :to="{name: 'attending'}" @click="this.collectionStore.smallMenu = true">
                             <i class="fa-solid fa-layer-group pr-2"></i>
-                            <span class="title" v-if="collectionStore.menu">My team</span>
+                            <span class="title" v-if="collectionStore.menu">Attending profile</span>
                         </router-link>
                     </li>
                      <li class="item py-2">
@@ -96,7 +96,7 @@
                 <!-- Start:System Managment -->
                 <ul class="system-menu menu mt-3">
                     <li class="item py-2">
-                        <router-link :to="{name: 'home'}" @click="this.collectionStore.smallMenu = true">
+                        <router-link :to="{name: 'status'}" @click="this.collectionStore.smallMenu = true">
                             <font-awesome-icon icon="chart-line" class="icon pr-2 "/>
                             <span class="title">Status Managment</span>
                         </router-link>
