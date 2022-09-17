@@ -511,3 +511,52 @@ background: #555;
 .overview  {
     z-index: 10000;
 }
+
+/* status */
+.status_color {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+/* Swal */
+.swal2-container {
+    z-index: 10000 !important;
+}
+
+.swal2-html-container {
+    font-size: 13px !important;
+}
+
+.swal2-title {
+    font-size: 18px !important;
+}
+
+.swal2-icon {
+    width: 56px !important;
+    height: 56px !important;
+}
+
+.swal2-icon-content {
+    font-size: 35px !important;
+}
+
+.swal2-confirm,
+.swal2-cancel {
+    font-size: 12px !important;
+    background: #01579b !important;
+}
+
+.swal2-cancel {
+    background-color: #d84d4a !important;
+}
+
+/* Toast */
+
+.toast {
+    background: #c82e46;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 5px;
+    padding: 10px;
+}
