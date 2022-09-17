@@ -8,7 +8,7 @@
                     <div class="mt-4 h-full">
                         <div class="user_info">
                             <label class="label pb-1">Role name</label>
-                            <input type="name" class="input w-full" placeholder="TheGreatestAssistance@iamgreat.com" v-model="payload.name"/>
+                            <input type="name" class="input w-full" placeholder="My Great Role" v-model="payload.name"/>
                             <p class="error">{{ error.name }}</p>
                             <p class="error">{{ error.priviledge }}</p>
                         </div>
@@ -59,6 +59,9 @@ import { mapActions } from 'pinia';
 import { useGuardStore } from '../../../stores/Guard';
 import { useCollectionStore } from '../../../stores/collection';
 export default {
+    props: {
+        search: Array
+    },
     data() {
         return {
           model: {
@@ -107,7 +110,7 @@ export default {
 
         creatRole() {
             this.loading.role_upsert = true;
-            this.upsertRole(this.payload).then((response) => {
+            this.upsertRole(this.payload,this.search).then((response) => {
                 this.loading.role_upsert = false;
                 if ( response.data.errors ) {
                     let data = response.data.errors[0].extensions.validation;
@@ -115,7 +118,7 @@ export default {
                     this.error.priviledge = data['input.priviledge'] ? data['input.priviledge'][0] : null;
                 } else {
                     this.model.model_open = false; 
-                    this.$emit('upsertRole',[this.payload]);
+                    this.$emit('upsertRole',response);
                     this.payload = {
                         name: "",
                         priviledges: []
@@ -138,6 +141,7 @@ export default {
     },
     mounted() {
         this.loading.model = true;
+        console.log(this.page);
         this.getPriviledges().then((response) => {
             this.priviledges = response.data.data.priviledges;
             this.loading.model = false;

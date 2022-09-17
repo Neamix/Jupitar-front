@@ -62,7 +62,27 @@
                     </ul>
                 </div>
             </div>
-            <div class="page_content">
+            <div class="page_content relative">
+                <div class="toast w-full relative">
+                    <div class="flex">
+                        <p>
+                            Howdy,We are unable to add new college due to the following problems
+                        </p>
+                        <button class="close_notification absolute right-3">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </button>
+                    </div>
+                    <ul class=" list-decimal pl-5 mt-2" v-if="!roles.length">
+                        <li v-if="!roles.length">
+                            Add at least one role                     
+                            <router-link :to="{'name': 'roles'}" class=" text-blue-500 underline pl-2 ">Add role</router-link>
+                        </li>
+                        <li>
+                            Add at least one attending profile
+                            <router-link :to="{'name': 'roles'}" class=" text-blue-500 underline pl-2 ">Add Attending Profile</router-link>
+                        </li>
+                    </ul>
+                </div>
                 <p class="w-full text-center text-sm text-gray-500 mt-5 font-semibold"  v-if="!loading.users && users.length == 0">Opps, we didn't get any data</p>
                 <Transition  name="menu">
                     <div class="mt-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2" v-if="!loading.users">
@@ -309,6 +329,8 @@ export default {
             });
 
         });
+
+       
     },
 }
 </script>

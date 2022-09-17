@@ -14,6 +14,9 @@ export const useGuardStore = defineStore('guard', {
     },
     actions: {
         hasPriviledges(name) {
+            if (!this.auth.user.role) {
+                return false;
+            }
             let priviledges = this.auth.user.role.priviledges;
             if ( this.auth.user.role.id == 1 || this.auth.user.role.id == 2 ) {
                 return true;
@@ -69,7 +72,7 @@ export const useGuardStore = defineStore('guard', {
             return array;
         },
 
-        upsertRole(payload) {
+        upsertRole(payload,search) {
 
             return axios({
                 method: "POST",
@@ -82,7 +85,19 @@ export const useGuardStore = defineStore('guard', {
                     query: `
                     mutation roleupsert($name: String,$priviledges: [ID],$id: ID) {
                         roleupsert(input: {name: $name,priviledges: $priviledges,id: $id}){
-                            name
+                            status
+                                roles(page:${search.page},input: {
+                                    name: "${search.name}",
+                                    
+                                    }) {
+                                    data {
+                                        name,
+                                        id,
+                                        users {
+                                            id
+                                        }
+                                    }
+                                }
                         }
                     }`,
                     variables: {
@@ -158,7 +173,15 @@ export const useGuardStore = defineStore('guard', {
                     query: `
                     mutation {
                         roledelete(id: ${payload.id},password:"${payload.password}") {
-                            name
+                            status,
+                            roles(first:40) {
+                                data {
+                                    name
+                                    users {
+                                        id
+                                    }
+                                }
+                            }
                         }
                     }
                     `

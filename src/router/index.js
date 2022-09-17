@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import BeforeGuard from "./guards/BeforeGuard";
 import MainViewVue from "../views/Pages/MainView.vue";
 import AuthViewVue from "../views/Auth/AuthView.vue";
+import MainBuilderVue from "../views/Pages/MainBuilder.vue"
 import teamRoutes from './TeamManagment.js';
 import AuthManagment from './AuthManagment';
 import NotFoundViewVue from '../views/Pages/NotFoundView.vue';
@@ -13,6 +14,11 @@ mainRoutes = mainRoutes.concat(teamRoutes);
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: "/builder",
+      name: "BuilderView",
+      component: MainBuilderVue
+    },
     {
       path: "/auth",
       name: "AuthView",

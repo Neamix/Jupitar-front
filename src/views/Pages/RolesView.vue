@@ -13,6 +13,7 @@
                 </h2>
                 <input type="search" placeholder="Search Roles" class="input w-full max-w-md h-10 ml-auto mt-2" @input="this.searchBy()" v-model="this.search.name"/>
             </div>
+            <p class="w-full text-center text-sm text-gray-500 mt-5 font-semibold"  v-if="!loading.role && roles.length == 0">Opps, we didn't get any data</p>
             <div class=" grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full py-3 grid" v-if="!this.role_loader">
                 <div class="role bg-white shadow-sm rounded-md p-3 m-1" v-for="role in roles" :key="role.id">
                     <div class="role_info cursor-pointer"  @click="updateRole(role.id)">
@@ -20,6 +21,9 @@
                         <div class="role info text-xs font-semibold text-gray-600 flex">
                             <span>{{role.users.length}} Members</span>
                             <div class="role_keys ml-auto">
+                                <span class="text-us pr-2" @click.stop="model.update_role = true;editRolePayload.id=role.id">
+                                    <i class="fa-solid fa-pen"></i>
+                                </span>
                                 <span class="text-us pr-2" @click.stop="model.deleteModel = true;deleteRolePayload.id=role.id">
                                     <i class="fa-solid fa-trash"></i>
                                 </span>
@@ -42,52 +46,13 @@
         </PageSlot>
     </Transition>
     <Transition name="fade">
-        <AddNewRoleModal v-if="model.new_role" @close="closeModels" @upsertRole="createdNewtRole"></AddNewRoleModal>
+        <AddNewRoleModal v-if="model.new_role" @close="closeModels" @upsertRole="createdNewtRole" :search="search"></AddNewRoleModal>
     </Transition>
     <Transition name="fade">
-        <EditRoleModal v-if="model.update_role" @close="closeModels" @upsertRole="createdNewtRole" :role_id="editRolePayload.id"></EditRoleModal>
+        <EditRoleModal v-if="model.update_role" @close="closeModels" @upsertRole="createdNewtRole" :role_id="editRolePayload.id" :search="search"></EditRoleModal>
     </Transition>
     <Transition name="fade">
-        <div
-            @click.self="model.deleteModel = false"
-            class="overview fixed z-1000 w-full h-full-screen bg-shadow top-0 left-0 flex justify-center  items-center" v-if="model.deleteModel">
-            <Transition name="menu" appear>
-                <div class="modal bg-white rounded-md  min-w-500  max-w-md  p-3" v-if="model.deleteModel">
-                    <div class="flex items-center justify-center flex-col">
-                        <img src="@/assets/img/system/warning.png" class="w-20"/>
-                        <p class="font-semibold text-xs p-4 text-center">
-                            Howdy, We have to warn you that this action is irreversable and the deleted data can't be retrived again
-                        </p>
-                    </div>
-                    <div class="form-group w-full my-4">
-                        <input type="password" placeholder="Confirm your password" class="w-full border-0  bg-gray-200 rounded-sm text-xs font-semibold" v-model="deleteRolePayload.password"/>
-                        <p class="error">{{ error.password }}</p>
-                    </div>
-                    <div class="flex ml-auto w-full justify-end">
-                        <button
-                        @click="model.deleteModel = false" 
-                        class=" border-0 bg-blue-600 hover:bg-blue-500 transition-all  text-white text-us font-semibold px-6  py-1 rounded-sm mx-2">
-                            Cancel
-                        </button>
-                        <button 
-                        @click="removeRole();"
-                        class=" flex relative justify-center items-center border-0 bg-red-600 hover:bg-red-500 transition-all  text-white text-us font-semibold px-6  py-1 rounded-sm">
-                            <span>Confirm</span>
-                            <svg 
-                                v-if="loading.delete"
-                                version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve" width="23px" class="ml-4 absolute right-1">
-                                <path fill="#fff"
-                                d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
-                                <animateTransform attributeName="transform" attributeType="XML" type="rotate" dur="1s" from="0 50 50"
-                                    to="360 50 50" repeatCount="indefinite" />
-                                </path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </Transition>
-        </div>
+       <DeleteRoleModel v-if="model.deleteModel" @close="closeModels" @deleted="removedRole" :role_id="deleteRolePayload.id" :search="search"></DeleteRoleModel>
     </Transition>
 </template>
 
@@ -100,9 +65,10 @@ import EditColleageModel from "../../components/modals/CollegesModels/EditCollea
 import { useGuardStore } from "../../stores/Guard";
 import AddNewRoleModal from "../../components/modals/RoleModels/AddNewRoleModal.vue";
 import EditRoleModal from "../../components/modals/RoleModels/EditRoleModal.vue";
+import DeleteRoleModel from "../../components/modals/RoleModels/DeleteRoleModel.vue";
 
 export default {
-    components: { PageSlot, PaginationComponent, EditColleageModel, AddNewRoleModal,EditRoleModal },
+    components: { PageSlot, PaginationComponent, EditColleageModel, AddNewRoleModal, EditRoleModal, DeleteRoleModel },
     data() {
         return {
             url: import.meta.env.VITE_APP_END_POINT + '/',
@@ -144,7 +110,7 @@ export default {
             search: {
                 name: "",
                 role: null,
-                page: parseInt(localStorage.getItem('CollegePager') || 1)
+                page: 1
             },
             sendSearchQuery:null,
             suspendID: null,
@@ -154,10 +120,11 @@ export default {
     },
     methods: {
         ...mapActions(useGuardStore,['getRolesList','deleteRole']),
-        createdNewtRole() 
+        createdNewtRole(response) 
         {
             this.closeModels('new_role_model');
-            this.role_loader = true;
+            this.closeModels('update_role_model');
+            this.roles = response.data.data.roleupsert.roles.data;
         },
 
         closeModels($model)
@@ -169,12 +136,10 @@ export default {
             if ( $model == 'update_role_model' ) {
                 this.model.update_role = false;
             } 
-            this.role_loader = true;
-            this.getRolesList(this.search).then((response) => {
-                this.roles = response.data.data.roles.data;
-                this.role_loader = false;
-            });
 
+            if ( $model == 'role_delete' ) {
+                this.model.deleteModel = false;
+            }
         },
 
         searchBy()
@@ -193,26 +158,9 @@ export default {
             this.model.update_role = true;
         },
 
-        removeRole() {
-            this.loading.delete = true;
-            this.error.deletePassword = "";
-            this.error.id = "";
-            this.deleteRole(this.deleteRolePayload).then((response) => {
-                let errors = response.data.errors;
-                if ( errors ) {
-                    let password = errors[0].extensions.validation['password'] ?? null;
-                    if (password) 
-                        this.error.password = password[0];
-                    
-                } else {
-                    this.model.deleteModel = false;
-                    this.getRolesList(this.search).then((response) => {
-                        this.roles = response.data.data.roles.data;
-                        this.role_loader = false;
-                    });
-                }
-                this.loading.delete = false;
-            })
+        removedRole(response) {
+            this.model.deleteModel = false;
+            this.roles = response.data.data.roledelete.roles.data;
         }
     },
 
@@ -222,7 +170,9 @@ export default {
         this.getRolesList(this.search).then((response) => {
             this.roles = response.data.data.roles.data;
             this.isLoading = false;
-        })
+        });
+
+        console.log(this.$route.params.valueOf('action'))
     }
 }
 </script>

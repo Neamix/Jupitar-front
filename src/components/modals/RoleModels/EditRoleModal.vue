@@ -60,7 +60,8 @@ import { useGuardStore } from '../../../stores/Guard';
 import { useCollectionStore } from '../../../stores/collection';
 export default {
     props: {
-        role_id: Number
+        role_id: Number,
+        search: Array
     },
     data() {
         return {
@@ -114,7 +115,7 @@ export default {
 
         updateRole() {
             this.loading.role_upsert = true;
-            this.upsertRole(this.payload).then((response) => {
+            this.upsertRole(this.payload,this.search).then((response) => {
                 this.loading.role_upsert = false;
                 if ( response.data.errors ) {
                     let data = response.data.errors[0].extensions.validation;
@@ -122,7 +123,7 @@ export default {
                     this.error.priviledge = data['input.priviledge'] ? data['input.priviledge'][0] : null;
                 } else {
                     this.model.model_open = false; 
-                    this.$emit('close','update_role_model');
+                    this.$emit('upsertRole',response);
                     this.payload = {
                         name: "",
                         priviledges: [],
@@ -151,7 +152,7 @@ export default {
             this.getRole(this.role_id).then((response) => {
                 let exist_priviledges = response.data.data.role.priviledges
                 this.payload.name = response.data.data.role.name;
-                 this.payload.id = response.data.data.role.id;
+                this.payload.id = response.data.data.role.id;
                 let priviledge_array = [];
                 for ( var item of exist_priviledges ) {
                     priviledge_array.push(item.id);

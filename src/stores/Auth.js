@@ -153,7 +153,7 @@ export const useAuthStore = defineStore('auth', {
                            email:"${payload.email}",
                            name:"${payload.name}",
                            id: ${payload.id || null},
-                           role: ${payload.role_id}
+                           role: ${payload.role || null}
                         })  {
                             status,
                             users(page:${page}) {
@@ -298,6 +298,7 @@ export const useAuthStore = defineStore('auth', {
         },
 
         getUserList(payload,page = 1) {
+            console.log(this.auth_token);
             return axios({
                 method: "POST",
                 url: import.meta.env.VITE_APP_END_POINT+'/graphql',

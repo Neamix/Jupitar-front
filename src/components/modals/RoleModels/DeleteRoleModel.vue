@@ -1,6 +1,5 @@
 <template>
     <div
-        @click.self="model.deleteModel = false"
         class="overview fixed z-1000 w-full h-full-screen bg-shadow top-0 left-0 flex justify-center  items-center" v-if="payload.id">
         <Transition name="menu" appear>
             <div class="modal bg-white rounded-md  min-w-500  max-w-md  p-3">
@@ -13,15 +12,16 @@
                 <div class="form-group w-full my-4">
                     <input type="password" placeholder="Confirm your password" class="w-full border-0  bg-gray-200 rounded-sm text-xs font-semibold" v-model="payload.password"/>
                     <p class="error">{{ error.deletePassword }}</p>
+                    <p class="error">{{ error.deleteId }}</p>
                 </div>
                 <div class="flex ml-auto w-full justify-end">
                     <button
-                    @click="model.deleteModel = false" 
+                    @click="closeModel()" 
                     class=" border-0 bg-blue-600 hover:bg-blue-500 transition-all  text-white text-us font-semibold px-6  py-1 rounded-sm mx-2">
                         Cancel
                     </button>
                     <button 
-                    @click="removeUser();"
+                    @click="removeRole();"
                     class=" flex relative justify-center items-center border-0 bg-red-600 hover:bg-red-500 transition-all  text-white text-us font-semibold px-6  py-1 rounded-sm">
                         <span>Confirm</span>
                         <svg 
@@ -41,60 +41,76 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapActions } from 'pinia';
-import { useAuthStore } from '../../../stores/Auth';
+import { useGuardStore } from '../../../stores/Guard';
 export default {
     props: {
-        user_id: Number,
-        page: Number
+        role_id: Number,
+        search: Array
     },
 
     data() {
         return {
+            roles: [],
+            loading: {
+                delete: false
+            },
+
             payload: {
-                id: null,
-                password: null
+                password: null,
+                id: this.id
             },
 
             error: {
+                deleteId: null,
                 deletePassword: null
-            },
-
-            loading: {
-                delete: null 
             }
         }
     },
 
     methods: {
-        ...mapActions(useAuthStore,['deleteUser']),
-        removeUser() {
+        ...mapActions(useGuardStore,['deleteRole']),
+        removeRole() {
             this.loading.delete = true;
-            this.error.deletePassword = "";
-            this.deleteUser(this.payload,this.page).then((response) => {
+            this.error = {
+                deleteId: null,
+                deletePassword: null
+            }
+
+            this.deleteRole(this.payload,this.search).then((response) => {
                 let errors = response.data.errors;
                 if ( errors ) {
-                    let passwordError = errors[0].extensions.validation['input.password'][0];
-                    this.error.deletePassword = passwordError;
+                    let passwordError = errors[0].extensions.validation['password'];
+                    let idError = errors[0].extensions.validation['id'];
+                    if (  passwordError )
+                        this.error.deletePassword = passwordError[0];
+                    if ( idError )
+                        this.error.deleteId = idError[0];
                 } else {
-
                     this.payload = {
                         id: null,
                         password: null
                     }
 
-                    this.$emit('deleted',response)
+                    this.$emit('deleted',response);
                 }
+
                 this.loading.delete = false;
-            });
+            })
         },
-    },  
+        closeModel() {
+            this.payload = {
+                id: null,
+                password: null
+            }
+
+            this.$emit("close","role_delete");
+        }
+    },
 
     mounted() {
-        this.payload.id = this.user_id;
+       this.payload.id = this.role_id;
     }
-
-
 }
 </script>

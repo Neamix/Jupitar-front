@@ -3,6 +3,9 @@ import HomeViewVue from "../views/Pages/HomeView.vue";
 import MonitoringViewVue from "../views/Pages/MonitoringView.vue";
 import ProfileViewVue from "../views/Pages/ProfileView.vue";
 import RoleViewVue from "../views/Pages/RolesView.vue";
+import RequestViewVue from "../views/Pages/RequestView.vue";
+import StatusViewVue from "../views/Pages/StatusesView.vue";
+import AttendingViewVue from "../views/Pages/AttendingView.vue";
 
 let teamRoutes = [
     {
@@ -34,7 +37,25 @@ let teamRoutes = [
         name: "roles",
         component: RoleViewVue,
         meta: {requiredAuth: true}
-    }
+    },
+    {
+        path: "/requests",
+        name: "requests",
+        component: RequestViewVue,
+        meta: {requiredAuth: true}
+    },
+    {
+        path: "/status",
+        name: "status",
+        component: StatusViewVue,
+        meta: {requiredAuth: true}
+    },
+    {
+        path: "/attending",
+        name: "attending",
+        component: AttendingViewVue,
+        meta: {requiredAuth: true}
+    },
 ];
 
 export default teamRoutes;
