@@ -14,7 +14,7 @@
         </div>
         <Transition name="menu" appear>
             <div class="modal bg-white rounded-md min-w-992 max-w-lg grid grid-cols-2" v-if="!loading.modal">
-                <img src="@/assets/img/models/travel.svg" class="w-full max-w-lg p-4 " alt="team" />
+                <img src="@/assets/img/models/status.svg" class="w-full max-w-lg p-4 " alt="team" />
                 <div class="p-5 relative">
                     <h2 class="font-extrabold text-headline ">Let's take part time off</h2>
                     <div class="mt-4 h-full">

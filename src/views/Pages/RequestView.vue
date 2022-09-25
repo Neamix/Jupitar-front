@@ -6,15 +6,15 @@
     </div>
     <Transition name="menu">
         <PageSlot v-if="!isLoading">
-            <div class="w-full bg-white shadow-sm rounded-md p-3">
-                <h2 class="font-bold text-26 mb-4 flex items-center">
+            <div class="w-full dark:bg-dark-300 bg-white shadow-sm rounded-md p-3">
+                <h2 class="font-bold text-26 mb-4 flex items-center dark:text-white">
                     <span>Requests Managment</span>
                     <span class="text-xs text-gray-500 px-4 hover:text-blue-500 cursor-pointer" @click="model.new_request = true">+ Add Request</span>
                 </h2>
                 <input type="search" placeholder="Search Requests" class="input w-full max-w-md h-10 ml-auto mt-2" @input="this.searchBy()" v-model="this.search.name"/>
             </div>
             <div class=" grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full py-3 grid" v-if="!this.request_loader">
-                <div class="request bg-white shadow-sm rounded-md p-3 m-1" v-for="request in requests" :key="request.id">
+                <div class="request bg-white dark:text-white dark:bg-dark-300 shadow-sm rounded-md p-3 m-1" v-for="request in requests" :key="request.id">
                     <div class="request_info cursor-pointer"  @click="updateRequest(request.id)">
                         <h4 class="text-xs font-semibold ">{{ request.name }}</h4>
                         <div class="request info text-xs font-semibold text-gray-600 flex">
@@ -119,8 +119,9 @@ export default {
         ...mapActions(useRequestStore,['getRequestsList']),
         createdNewtRequest(response) 
         {
-            this.closeModels('new_request_model');
-            this.closeModels('update_request_model');
+            console.log('here')
+            this.model.new_request = false;
+            this.model.update_request = false
             this.requests = response.data.data.requestupsert.requests.data;
         },
 
@@ -156,7 +157,7 @@ export default {
         },
 
         removedRequest(response) {
-            this.model = false;
+            this.model.delete_request = false;
             this.requests = response.data.data.requestdelete.requests.data;
         }
     },
@@ -168,6 +169,7 @@ export default {
             this.requests = response.data.data.requests.data;
             this.isLoading = false;
         })
+    
     }
 }
 </script>

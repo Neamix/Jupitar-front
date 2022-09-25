@@ -63,6 +63,31 @@ export const useRequestStore = defineStore('request', {
             })
         },
 
+        getAllRequests() {
+            return axios({
+                method: "POST",
+                url: import.meta.env.VITE_APP_END_POINT+'/graphql',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${this.auth_token}`
+                },
+                data: {
+                    query: `
+                    query {
+                        requestall {
+                            name,
+                            id,
+                            requestType {
+                              id,
+                              type
+                            }
+                        }
+                    }
+                    `
+                }
+            })
+        },
+
         upsertRequest(payload,search) {
             return axios({
                 method: "POST",

@@ -1,5 +1,6 @@
 
 module.exports = {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
@@ -19,7 +20,10 @@ module.exports = {
         "silvery": "#f3f0f0",
         "light-silvery": "#e7e7e7",
         "gray-10": "rgb(217, 217, 229)",
-        "shadow": "#0004"
+        "shadow": "#0004",
+        "dark-200": "#191919",
+        "dark-100": "#323232",
+        "dark-300": "#262626"
       },
       inset: {
         "drop": "73px",
@@ -52,6 +56,11 @@ module.exports = {
       },
       fontWeight: {
         "lightbold": "500"
+      },
+      flexGrow: {
+        '1': 1,
+        '2': 2,
+        '3': 3
       }
     },
   },

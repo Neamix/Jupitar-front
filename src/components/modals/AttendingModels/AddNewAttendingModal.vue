@@ -2,52 +2,45 @@
     <div
         class="overview fixed z-1000 w-full h-full-screen bg-shadow top-0 left-0 flex justify-center  items-center">
         <Transition name="menu" appear>
-            <div class="modal bg-white rounded-md min-w-992 max-w-lg grid grid-cols-2">
-                <img src="@/assets/img/models/travel.svg" class="w-full max-w-lg p-4 " alt="team" />
-                <div class="p-5 relative">
-                    <h2 class="font-extrabold text-headline ">Let's take part time off</h2>
-                    <div class="mt-4 h-full">
-                        <div class="request_info">
-                            <label class="label pb-1">Request name</label>
-                            <input type="name" class="input w-full" placeholder="Howdy Request" v-model="payload.name"/>
-                            <p class="error">{{ error.name }}</p>
-                        </div>
-                        <div class="grid grid-cols-1 mt-3">
-                            <div class="group p-1">
-                                <label class="label pb-1">Request type</label>
-                                <div class="select relative" @click="dropdown.requestMenu =! dropdown.requestMenu ">
-                                    <div class="placeholder input w-full flex items-center">
-                                        <span> {{ payload.type }} </span>
-                                        <font-awesome-icon icon="chevron-down" class="ml-auto transition-all" :class="{'rotate-180': dropdown.requestMenu}" />
+            <div class="modal bg-white rounded-md min-w-992 max-w-lg">
+                <div class="p-5 w-full">
+                    <h2 class="font-extrabold text-headline ">Control your employees</h2>
+                    <div class="mt-5 w-full">
+                        <input type="text" placeholder="Attending Profile name" class="w-full input"/> 
+                    </div>
+                    <div class="mt-5">
+                        <div class="requests">
+                            <div class="flex">
+                                <h2 class=" text-sm font-semibold mb-2">Profile Requests</h2>
+                                <span class="text-xs text-gray-500 px-4 hover:text-blue-500 cursor-pointer font-semibold " @click="increment.requests++" >+ Add Request</span>
+                            </div>
+                            <div class="requests mt-2" v-for="requestindex in increment.requests" :key="requestindex">
+                                {{ AddRequestForm(requestindex) }}
+                                <div class="grid grid-cols-2">
+                                    <div class="placeholder input w-full flex items-center relative rounded-full cursor-pointer" data-menu="roleMenu" @click="dropdown.requestMenu[requestindex] =! dropdown.requestMenu[requestindex]">
+                                        <span data-menu="requestModel"> {{ dropdown.placeholder_request[requestindex] }} </span>
+                                        <font-awesome-icon icon="chevron-down" class="ml-auto transition-all" :class="{'rotate-180': dropdown.requestMenu[requestindex]}" data-menu="roleMenu" />
+                                        <transition 
+                                            enter-active-class="transform transition duration-500 ease-custom"
+                                            enter-class="-translate-y-1/2 scale-y-0 opacity-0"
+                                            enter-to-class="translate-y-0 scale-y-100 opacity-100"
+                                            leave-active-class="transform transition duration-300 ease-custom"
+                                            leave-class="translate-y-0 scale-y-100 opacity-100"
+                                            leave-to-class="-translate-y-1/2 scale-y-0 opacity-0">
+                                            <ul class="select_menu bg-gray-100 rounded-md mt-2 dark:bg-dark-300 shadow-md absolute z-20 " v-if="dropdown.requestMenu[requestindex]">
+                                                <li class="text-xs font-semibold p-2 cursor-pointer hover:bg-blue-500 hover:text-white" v-for="request in requests" :key="request.id" @click="dropdown.placeholder_request[requestindex] = request.name">{{ request.name }}</li>
+                                            </ul>
+                                        </transition>
                                     </div>
-                                    <transition 
-                                        enter-active-class="transform transition duration-500 ease-custom"
-                                        enter-class="-translate-y-1/2 scale-y-0 opacity-0"
-                                        enter-to-class="translate-y-0 scale-y-100 opacity-100"
-                                        leave-active-class="transform transition duration-300 ease-custom"
-                                        leave-class="translate-y-0 scale-y-100 opacity-100"
-                                        leave-to-class="-translate-y-1/2 scale-y-0 opacity-0">
-                                        <ul class="select_menu bg-gray-100 rounded-md mt-2 shadow-md absolute z-1000" v-if="dropdown.requestMenu">
-                                            <li class="text-xs font-semibold p-2 cursor-pointer hover:bg-blue-500 hover:text-white" :class="{'bg-blue-500 text-white': payload.type_id == 2}" @click="payload.type= 'Hourly';payload.type_id=2">Hourly</li>
-                                            <li class="text-xs font-semibold p-2 cursor-pointer hover:bg-blue-500 hover:text-white" :class="{'bg-blue-500 text-white': payload.type_id == 1}" @click="payload.type= 'Daily';payload.type_id=1">Daily</li>
-                                        </ul>
-                                    </transition>
+                                    <div class="value flex items-center">
+                                        <input type="number" placeholder="Value" class="input ml-2"/>
+                                        <span class="ml-2 text-xs font-semibold">- Remove Request</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="flex absolute bottom-0 right-3">
-                            <button class="relative right-2 my-5 mx-1 text-xs font-semibold bg-blue-600 py-2 px-10 rounded-sm text-white flex" @click="addRequest()">
-                                Add request
-                                <svg class="loader-auth absolute w-5" viewBox="0 0 50 50" v-if="loading.add"  style="right:7%">
-                                    <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
-                                </svg>
-                            </button>
-                            <button class=" right-2 my-5 mx-1 text-xs font-semibold bg-red-600 py-2 px-10 rounded-sm text-white flex" @click="closeModel()">
-                                Cancel
-                            </button>
-                        </div>
                     </div>
-                </div>
+                </div>          
             </div>
         </Transition>
     </div>
@@ -65,30 +58,36 @@ export default {
     },
     data() {
         return {
+          increment: {
+            requests: 1
+          },
           loading: {
             add: false,
+          },
+          requests: {},
+          model: {
+            placeholder_request: "Choose a request"
           },
           payload: {
             name: "",
             id: null,
-            type: "Daily",
-            type_id: 1,
+            requests: {}
           },
           error: {
             email: "",
             name: ""
           },
           dropdown: {
-            requestMenu: false
+            requestMenu: {},
+            placeholder_request: {}
           }
         }
     },
     methods: {
-        ...mapActions(useRequestStore,['getRequest','upsertRequest']),
+        ...mapActions(useRequestStore,['getAllRequests']),
         addRequest() {
             this.loading.add = true;
             this.upsertRequest(this.payload,this.search).then((response) => {
-                console.log(response);
                 if ( response.data.errors ) {
                     let data = response.data.errors[0].extensions.validation;
                     this.error.name  = data['input.name'] ? data['input.name'][0] : null;
@@ -105,12 +104,26 @@ export default {
                 this.loading.add = false;
             })
         },
+        AddRequestForm(index) {
+            if ( ! this.dropdown.requestMenu[index] ) {
+                this.dropdown.requestMenu[index] = false;
+                this.dropdown.placeholder_request[index] = "Choose request"
+            }
+            console.log(this.dropdown)
+
+        },
+        changePlaceholder(index) {
+            console.log(index);
+        },
+
         closeModel() {
             this.$emit('close','new_request_model');
-        }
+        },
     },
     mounted() {
-        console.log(this.search)
+        this.getAllRequests().then((response) => {
+            this.requests = response.data.data.requestall;
+        })
     }
 }
 </script>

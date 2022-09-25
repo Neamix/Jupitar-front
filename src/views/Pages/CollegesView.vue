@@ -6,9 +6,9 @@
     </div>
     <Transition name="menu">
         <PageSlot v-if="!isLoading">
-            <div class="w-full bg-white shadow-sm rounded-md p-3">
+            <div class="w-full bg-white dark:text-white dark:bg-dark-300 rounded-md p-3">
                 <h2 class="font-bold text-26 mb-4 flex items-center">
-                    <span>Colleges</span>
+                    <span>Colleges Managment</span>
                     <span class="text-xs text-gray-500 px-4 hover:text-blue-500 cursor-pointer" @click="model.college_invite_model = true">+ Add Colleges</span>
                 </h2>
                 <div class="xl:flex filter-search grid grid-cols-1">
@@ -20,7 +20,7 @@
                                 d="M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0011.6 0l43.6-43.5a8.2 8.2 0 000-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z">
                             </path>
                         </svg>
-                        <input type="search" class="bg-gray-50 text-sm px-3 py-2 min-w-fit search" placeholder="Search.." @keyup="searchBy()" @change="searchBy()" v-model="search.name"/>
+                        <input type="search" class="input bg-gray-50 text-sm px-3 py-2 min-w-fit search" placeholder="Search.." @keyup="searchBy()" @change="searchBy()" v-model="search.name"/>
                     </div>
                     <div class="search-container mx-10">
                         <div class="placeholder input w-full flex items-center relative rounded-full" data-menu="roleMenu" @click="dropDowns.roleMenu =! dropDowns.roleMenu;">
@@ -33,7 +33,7 @@
                                 leave-active-class="transform transition duration-300 ease-custom"
                                 leave-class="translate-y-0 scale-y-100 opacity-100"
                                 leave-to-class="-translate-y-1/2 scale-y-0 opacity-0">
-                                <ul class="select_menu bg-gray-100 rounded-md mt-2 shadow-md absolute z-20 "
+                                <ul class="select_menu bg-gray-100 rounded-md mt-2 dark:bg-dark-300 shadow-md absolute z-20 "
                                     v-if="dropDowns.roleMenu">
                                     <li class="text-xs font-semibold p-2 hover:bg-blue-500 hover:text-white cursor-pointer" v-for="role in roles" :key="role.id" @click="search.role = role.id;this.model.placeholder = role.name;searchBy();model.placeholder_role = role.name">{{ role.name }}</li>
                                 </ul>
@@ -72,7 +72,7 @@
                             <i class="fa-solid fa-circle-xmark"></i>
                         </button>
                     </div>
-                    <ul class=" list-decimal pl-5 mt-2" v-if="!roles.length">
+                    <ul class=" list-decimal pl-5 mt-2">
                         <li v-if="!roles.length">
                             Add at least one role                     
                             <router-link :to="{'name': 'roles'}" class=" text-blue-500 underline pl-2 ">Add role</router-link>
@@ -86,8 +86,8 @@
                 <p class="w-full text-center text-sm text-gray-500 mt-5 font-semibold"  v-if="!loading.users && users.length == 0">Opps, we didn't get any data</p>
                 <Transition  name="menu">
                     <div class="mt-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2" v-if="!loading.users">
-                        <div class="card mt-1 bg-white shadow-sm mx-2 rounded-md relative" v-for="user in users" :key="user.id">
-                            <div class="shadow-sm rounded-md w-full flex items-center">
+                        <div class="card mt-1 bg-white dark:bg-dark-300 shadow-sm dark:text-white  mx-2 rounded-md relative" v-for="user in users" :key="user.id">
+                            <div class="rounded-md w-full flex items-center">
                                 <img :src="avatarSwitcher(user.avatar)" alt="person" class="avatar rounded-full p-3" />
                                 <div class="user-info">
                                     <h3 class="text-sm font-semibold w-full">

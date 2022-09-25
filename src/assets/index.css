@@ -5,6 +5,7 @@
 body {
     @apply bg-body-background-color;
     font-family: 'Poppins', sans-serif !important;
+    user-select: none;
 }
 
 ::-webkit-input-placeholder {
@@ -41,12 +42,12 @@ nav .active {
 
 aside {
     width: 250px;
-    @apply bg-white;
+    @apply bg-white dark:bg-dark-300;
     @apply to-white;
     box-shadow: 0 1px 4px -1px rgb(0 0 0 / 15%);
     height: 100vh;
     padding: 12px 24px;
-    transition: all .3s linear;
+    transition: width .3s linear;
 }
 
 aside.large.collapse {
@@ -87,6 +88,15 @@ aside.collapse~.page {
     margin-left: 70px;
 }
 
+aside ul.main {
+    width: 144px;
+}
+
+aside span,
+aside i {
+    @apply dark:text-white
+}
+
 @media screen and (max-width:896px) {
     aside.collapse~.page {
         margin-left: 0px;
@@ -98,6 +108,7 @@ aside.collapse~.page {
 
 .page {
     margin-left: 250px;
+    @apply dark:bg-dark-200
 }
 
 @media screen and (max-width: 896px) {
@@ -241,7 +252,7 @@ aside.collapse~.page {
 /* Forms */
 
 .input {
-    @apply bg-gray-50 text-sm px-3 py-2 bg-gray-100 rounded-xl font-semibold outline-blue-600 border-none;
+    @apply bg-gray-50 text-sm px-3 py-2 bg-gray-100 dark:bg-dark-100 rounded-xl outline-blue-600 border-none;
 }
 
 ::placeholder,
@@ -255,6 +266,10 @@ aside.collapse~.page {
 
 .error {
     @apply text-us text-red-700 font-semibold pt-1
+}
+
+.error_input {
+    background: #ff000021 !important;
 }
 
 /* Profile */
@@ -278,9 +293,7 @@ aside.collapse~.page {
 .card {
     background: #fff;
     width: 100%;
-    box-shadow: 3px 3px 9px #f1eeee;
     border-radius: 5px;
-    border: 1px solid #f2f2f2;
 }
 
 /* Loader */
@@ -559,4 +572,88 @@ background: #555;
     font-size: 12px;
     border-radius: 5px;
     padding: 10px;
+}
+
+/* Sheets */
+.grabbable {
+    user-select:none;
+    cursor: move; 
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+}
+
+.grabbable:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+/* Status color */
+#swatch{
+    background: white;
+    box-shadow: 1em 1em 1em rgba(0, 0, 0, .1);
+    display: flex;
+    flex-direction: column;
+    width: 74px;
+    height: 80px;
+}
+
+#swatch #color {
+    width: 72px;
+    height: 66px;
+}
+
+#swatch .info{
+    padding: 4px;
+}
+
+#swatch .type {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+#swatch h1{
+    margin: 0;
+    text-transform: uppercase;
+}
+
+#swatch h2{
+    font-weight: normal;
+    margin: 0;
+}
+
+input[type="color"] {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    height: 15em;
+    padding: 0;
+    width: 15em;
+}
+
+#swatch:focus{
+    border-radius: 0;
+    outline: none;
+}
+
+#swatch::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+#swatch::-webkit-color-swatch{
+    border: 0;
+    border-radius: 0;
+}
+
+#swatch::-moz-color-swatch,
+#swatch::-moz-focus-inner{
+    border: 0;
+}
+
+#swatch::-moz-focus-inner{
+    padding: 0;
 }

@@ -6,7 +6,7 @@
     </div>
     <Transition name="menu">
         <PageSlot v-if="!isLoading">
-            <div class="w-full bg-white shadow-sm rounded-md p-3">
+            <div class="w-full bg-white dark:text-white dark:bg-dark-300  shadow-sm rounded-md p-3">
                 <h2 class="font-bold text-26 mb-4 flex items-center">
                     <span>Statuses Managment</span>
                     <span class="text-xs text-gray-500 px-4 hover:text-blue-500 cursor-pointer" @click="model.new_status = true">+ Add Status</span>
@@ -14,7 +14,7 @@
                 <input type="search" placeholder="Search Statuses" class="input w-full max-w-md h-10 ml-auto mt-2" @input="this.searchBy()" v-model="this.search.name"/>
             </div>
             <div class=" grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full py-3 grid" v-if="!this.status_loader">
-                <div class="status bg-white shadow-sm rounded-md p-3 m-1" v-for="status in statuses" :key="status.id">
+                <div class="status bg-white dark:text-white dark:bg-dark-300  shadow-sm rounded-md p-3 m-1" v-for="status in statuses" :key="status.id">
                     <div class="status_info cursor-pointer"  @click="updateStatus(status.id)">
                         <h4 class="text-xs font-semibold flex items-center ">
                             {{ status.name }}

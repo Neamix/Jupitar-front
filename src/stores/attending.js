@@ -59,7 +59,8 @@ export const useAttendingStore = defineStore('attending', {
             })
         },
 
-        upsertAttending(payload,search) {
+        upsertAttending(payload) {
+            console.log(payload.status)
             return axios({
                 method: "POST",
                 url: import.meta.env.VITE_APP_END_POINT+'/graphql',
@@ -69,27 +70,22 @@ export const useAttendingStore = defineStore('attending', {
                 },
                 data: {
                     query: `
-                        mutation {
-                            attendingupsert(input:{
-                            name: "${payload.name}",
-                            type: ${payload.type_id},
-                            id: ${payload.id}
+                    mutation attendingupsert ($name: String,$requests: [AttendingRequest],$status: [ID],$id: ID) {
+                        attendingupsert(input:{
+                                name: $name,
+                                request: $requests,
+                                status: $status,
+                                id: $id
                         }) {
-                            status,
-                            attendings(page: ${search.page} ,input: {
-                                name: "${search.name}"
-                            }) {
-                                data {
-                                    id,
-                                    name,
-                                    attendingType {
-                                        id,
-                                        type
-                                    }
-                                }
+                                status
                             }
                         }
-                    }`,
+                    `,
+                    variables: {
+                        requests: payload.requests,
+                        name: payload.name,
+                        status: payload.status
+                    }
                 }
             })
         },

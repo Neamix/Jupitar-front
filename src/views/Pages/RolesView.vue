@@ -6,7 +6,7 @@
     </div>
     <Transition name="menu">
         <PageSlot v-if="!isLoading">
-            <div class="w-full bg-white shadow-sm rounded-md p-3">
+            <div class="w-full bg-white dark:text-white dark:bg-dark-300 shadow-sm rounded-md p-3">
                 <h2 class="font-bold text-26 mb-4 flex items-center">
                     <span>Roles Managment</span>
                     <span class="text-xs text-gray-500 px-4 hover:text-blue-500 cursor-pointer" @click="model.new_role = true">+ Add Role</span>
@@ -15,7 +15,7 @@
             </div>
             <p class="w-full text-center text-sm text-gray-500 mt-5 font-semibold"  v-if="!loading.role && roles.length == 0">Opps, we didn't get any data</p>
             <div class=" grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full py-3 grid" v-if="!this.role_loader">
-                <div class="role bg-white shadow-sm rounded-md p-3 m-1" v-for="role in roles" :key="role.id">
+                <div class="role  bg-white dark:text-white dark:bg-dark-300 shadow-sm rounded-md p-3 m-1" v-for="role in roles" :key="role.id">
                     <div class="role_info cursor-pointer"  @click="updateRole(role.id)">
                         <h4 class="text-xs font-semibold ">{{ role.name }}</h4>
                         <div class="role info text-xs font-semibold text-gray-600 flex">

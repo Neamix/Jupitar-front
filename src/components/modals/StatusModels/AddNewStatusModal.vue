@@ -2,21 +2,26 @@
     <div
         class="overview fixed z-1000 w-full h-full-screen bg-shadow top-0 left-0 flex justify-center  items-center">
         <Transition name="menu" appear>
-            <div class="modal bg-white rounded-md min-w-992 max-w-lg grid grid-cols-2">
-                <img src="@/assets/img/models/travel.svg" class="w-full max-w-lg p-4 " alt="team" />
+            <div class="modal bg-white rounded-md min-w-992 max-w-lg grid grid-cols-2 dark:bg-dark-300 ">
+                <img src="@/assets/img/models/status.svg" class="w-full max-w-lg p-4 " alt="team" />
                 <div class="p-5 relative">
-                    <h2 class="font-extrabold text-headline ">Let's take part time off</h2>
+                    <h2 class="font-extrabold text-headline dark:text-white">Let's take part time off</h2>
                     <div class="mt-4 h-full">
                         <div class="status_info">
-                            <label class="label pb-1">Status name</label>
+                            <label class="label pb-1 dark:text-white">Status name</label>
                             <input type="name" class="input w-full" placeholder="Howdy Status" v-model="payload.name"/>
                             <p class="error">{{ error.name }}</p>
                         </div>
                         <div class="grid grid-cols-1 mt-3">
                             <div class="group p-1">
-                                <label class="label pb-1">Status type</label>
+                                <label class="label pb-1 dark:text-white">Status type</label>
                                 <div class="select relative" @click="dropdown.statusMenu =! dropdown.statusMenu ">
-                                    <input type="color" v-model="payload.color">
+                                    <div id="swatch">
+                                        <input type="color" id="color" v-model="payload.color">
+                                        <div class="info">
+                                            <h5 class="type">Color</h5>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

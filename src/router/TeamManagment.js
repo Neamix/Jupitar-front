@@ -6,12 +6,20 @@ import RoleViewVue from "../views/Pages/RolesView.vue";
 import RequestViewVue from "../views/Pages/RequestView.vue";
 import StatusViewVue from "../views/Pages/StatusesView.vue";
 import AttendingViewVue from "../views/Pages/AttendingView.vue";
+import MainBuilder from "../views/Pages/MainBuilder.vue";
+import AttendingUpsert from "../views/AttendingProfile/Attending.vue";
 
 let teamRoutes = [
     {
         path: "/",
         name: "home",
         component: HomeViewVue,
+        meta: {requiredAuth: true}
+    },
+    {
+        path: "/builder",
+        name: "builder",
+        component: MainBuilder,
         meta: {requiredAuth: true}
     },
     {
@@ -56,6 +64,12 @@ let teamRoutes = [
         component: AttendingViewVue,
         meta: {requiredAuth: true}
     },
+    {
+        path: "/attending/upsert",
+        name: "upsert_attending",
+        component: AttendingUpsert,
+        meta: {requiredAuth: true}
+    }
 ];
 
 export default teamRoutes;

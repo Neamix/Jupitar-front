@@ -5,7 +5,7 @@ import { RouterLink, RouterView } from "vue-router";
 <template>
     <div class="main light">
         <NavbarComponent/>
-        <div class="flex top-16 pt-2 relative">
+        <div class="flex top-16 pt-2 relative dark:bg-dark-300">
           <AsideComponent/>
           <router-view :key="$route.path"></router-view>
         </div>
