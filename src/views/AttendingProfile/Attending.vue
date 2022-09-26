@@ -11,12 +11,12 @@
                 </button>
             </div>
             <input type="text" placeholder="Attending profile name" class="input w-full" v-model="payload.name"/>
-            <p class="error" v-if="error.profile_name">Please enter name for this profile</p>
+            <p class="error ml-2" v-if="error_display.profile_name">{{ error_display.profile_name }}</p>
         </div>
         <div class="w-full bg-white dark:text-white dark:bg-dark-300 shadow-sm rounded-md p-3">
             <div class="mt-2">
                 <h3 class="font-semibold text-sm mb-3">Attending profile requests</h3>
-                <div class="grid grid-cols-2">
+                <div class="grid grid-cols-2" v-if="requests.length">
                     <div class="placeholder input w-full flex items-center relative rounded-full cursor-pointer" :class="{error_input: error.request_name}" @click="dropdown.requestMenu =! dropdown.requestMenu">
                         <span data-menu="requestModel" > {{ placeholder.placeholder_request }} </span>
                         <font-awesome-icon icon="chevron-down" class="ml-auto transition-all" :class="{'rotate-180': dropdown.requestMenu}" data-menu="roleMenu" />
@@ -83,7 +83,7 @@
         <div class="w-full bg-white dark:text-white dark:bg-dark-300 shadow-sm rounded-md p-3 mt-3">
             <div class="mt-2">
                 <h3 class="font-semibold text-sm mb-3">Attending profile status</h3>
-                <div class="grid grid-cols-2">
+                <div class="grid grid-cols-2"  v-if="statuses.length">
                     <div class="placeholder input w-full flex items-center relative rounded-full cursor-pointer" :class="{error_input: error.status_name}" @click="dropdown.statusMenu =! dropdown.statusMenu">
                         <span data-menu="requestModel"> {{ placeholder.placeholder_status }} </span>
                         <font-awesome-icon icon="chevron-down" class="ml-auto transition-all" :class="{'rotate-180': dropdown.statusMenu}" data-menu="roleMenu" />
@@ -123,7 +123,7 @@
                                     {{ status.name }}
                                 </td>
                                 <td class="py-4 px-6">
-                                    <span class="font-semibold cursor-pointer" @click="RemoveRequest(request.id)">
+                                    <span class="font-semibold cursor-pointer" @click="RemoveStatus(status.id)">
                                         - Remove status
                                     </span>
                                 </td>
@@ -192,6 +192,10 @@ export default ({
                 profile_name: false
             },
 
+            error_display: {
+                profile_name: null
+            },
+
             loading: false
         }
     },
@@ -223,7 +227,8 @@ export default ({
         AddNewRequest() {
 
             if ( this.added_request.id && this.added_request.value ) {
-
+                let request_index = this.requests.findIndex(x => x.id == this.added_request.id);
+                this.requests.splice(request_index,1);
                 this.appended_requests.push({
                     id: this.added_request.id,
                     type: this.added_request.type,
@@ -232,7 +237,7 @@ export default ({
                 });
 
                 this.payload.requests.push({request_id: this.added_request.id , value: this.added_request.value});
-
+                
                 this.added_request = {
                     type: null,
                     value: null,
@@ -256,6 +261,8 @@ export default ({
         },
 
         AddNewStatus() {
+            let status_index = this.requests.findIndex(x => x.id == this.added_request.id);
+            this.statuses.splice(status_index,1);
             if( this.added_status.id ) {
 
                 this.appended_statuses.push({
@@ -278,15 +285,37 @@ export default ({
         RemoveRequest(index) {
             let getIndex = this.appended_requests.findIndex(x => x.id == index);
             let payloadIndex = this.payload.requests.findIndex(x => x.id == index);
-            this.appended_requests.splice(getIndex,1);
+            let spliced_request =  this.appended_requests.splice(getIndex,1);
+            this.requests.push({id: spliced_request[0].id,type: spliced_request[0].type,name: spliced_request[0].name});
             this.payload.requests.splice(payloadIndex,1);
-            console.log(this.payload.requests);
+            this.requests.sort(function(a,b){
+                return a.id - b.id;
+            });
+        },
+
+        RemoveStatus(index) {
+            let getIndex = this.appended_statuses.findIndex(x => x.id == index);
+            let payloadIndex = this.payload.status.findIndex(x => x.id == index);
+            let spliced_status =  this.appended_statuses.splice(getIndex,1);
+            this.statuses.push({id: spliced_status[0].id,type: spliced_status[0].type,name: spliced_status[0].name});
+            this.payload.status.splice(payloadIndex,1);
+            this.statuses.sort(function(a,b){
+                return a.id - b.id;
+            });
         },
 
         saveProfile() {
-            console.log(this.payload);
             this.upsertAttending(this.payload).then((response) => {
                 this.loading = false;
+                let errors = response.data.errors;
+                if ( errors ) {
+                    let errorBag = errors[0].extensions.validation
+                    if ( errorBag['input.name'] ) {
+                        this.error_display.profile_name = errorBag['input.name'][0]
+                    }
+                } else {
+                    this.$router.push({name: "attending"});
+                }
             });
         }
     },

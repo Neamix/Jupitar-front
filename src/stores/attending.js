@@ -24,8 +24,8 @@ export const useAttendingStore = defineStore('attending', {
                         attending(id:${payload.id}) {
                            name,
                            attendingType {
-                             type,
-                             id
+                                type,
+                                id
                           }
                         }
                     }
@@ -60,7 +60,6 @@ export const useAttendingStore = defineStore('attending', {
         },
 
         upsertAttending(payload) {
-            console.log(payload.status)
             return axios({
                 method: "POST",
                 url: import.meta.env.VITE_APP_END_POINT+'/graphql',

@@ -9,7 +9,7 @@
             <div class="w-full bg-white dark:text-white dark:bg-dark-300 shadow-sm rounded-md p-3">
                 <h2 class="font-bold text-26 mb-4 flex items-center">
                     <span>Attendings Managment</span>
-                    <span class="text-xs text-gray-500 px-4 hover:text-blue-500 cursor-pointer" @click="model.new_attending = true">+ Add Attending</span>
+                    <router-link class="text-xs text-gray-500 px-4 hover:text-blue-500 cursor-pointer" :to="{name:'upsert_attending'}">+ Add Attending</router-link>
                 </h2>
                 <input type="search" placeholder="Search Attendings" class="input w-full max-w-md h-10 ml-auto mt-2" @input="this.searchBy()" v-model="this.search.name"/>
             </div>
