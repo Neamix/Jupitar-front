@@ -1,5 +1,10 @@
 <template>
     <page-slot>
+        <div class="loading h-full-screen" v-if="isLoading">
+            <svg class="spinner" viewBox="0 0 50 50">
+                <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+            </svg>
+        </div>
         <div class="w-full bg-white dark:text-white dark:bg-dark-300 shadow-sm rounded-md p-3 mb-3 relative">
             <div class="flex relatvie">
                 <h3 class="font-bold text-26 mb-4 flex items-center">{{ type }}</h3>
@@ -16,7 +21,7 @@
         <div class="w-full bg-white dark:text-white dark:bg-dark-300 shadow-sm rounded-md p-3">
             <div class="mt-2">
                 <h3 class="font-semibold text-sm mb-3">Attending profile requests</h3>
-                <div class="grid grid-cols-2" v-if="requests.length">
+                <div class="grid grid-cols-2" v-if="available_requests.length">
                     <div class="placeholder input w-full flex items-center relative rounded-full cursor-pointer" :class="{error_input: error.request_name}" @click="dropdown.requestMenu =! dropdown.requestMenu">
                         <span data-menu="requestModel" > {{ placeholder.placeholder_request }} </span>
                         <font-awesome-icon icon="chevron-down" class="ml-auto transition-all" :class="{'rotate-180': dropdown.requestMenu}" data-menu="roleMenu" />
@@ -28,8 +33,8 @@
                             leave-class="translate-y-0 scale-y-100 opacity-100"
                             leave-to-class="-translate-y-1/2 scale-y-0 opacity-0">
                             <ul class="select_menu bg-gray-100 rounded-md mt-2 dark:bg-dark-300 shadow-md absolute z-20 "  v-if="dropdown.requestMenu">
-                                <li class="text-xs font-semibold p-2 cursor-pointer hover:bg-blue-500 hover:text-white" v-for="request in requests" :key="request.id" 
-                                @click="placeholder.placeholder_request = request.name,added_request.name = request.name,added_request.type = request.requestType.type,added_request.id = request.id">{{ request.name }}</li>
+                                <li class="text-xs font-semibold p-2 cursor-pointer hover:bg-blue-500 hover:text-white" v-for="available_request in available_requests" :key="available_request.id" 
+                                @click="placeholder.placeholder_request = available_request.name,added_request.name = available_request.name,added_request.type = available_request.requestType.type,added_request.id = available_request.id">{{ available_request.name }}</li>
                             </ul>
                         </transition>
                     </div>
@@ -83,7 +88,7 @@
         <div class="w-full bg-white dark:text-white dark:bg-dark-300 shadow-sm rounded-md p-3 mt-3">
             <div class="mt-2">
                 <h3 class="font-semibold text-sm mb-3">Attending profile status</h3>
-                <div class="grid grid-cols-2"  v-if="statuses.length">
+                <div class="grid grid-cols-2"  v-if="available_statuses.length">
                     <div class="placeholder input w-full flex items-center relative rounded-full cursor-pointer" :class="{error_input: error.status_name}" @click="dropdown.statusMenu =! dropdown.statusMenu">
                         <span data-menu="requestModel"> {{ placeholder.placeholder_status }} </span>
                         <font-awesome-icon icon="chevron-down" class="ml-auto transition-all" :class="{'rotate-180': dropdown.statusMenu}" data-menu="roleMenu" />
@@ -95,8 +100,8 @@
                             leave-class="translate-y-0 scale-y-100 opacity-100"
                             leave-to-class="-translate-y-1/2 scale-y-0 opacity-0">
                             <ul class="select_menu bg-gray-100 rounded-md mt-2 dark:bg-dark-300 shadow-md absolute z-20 " v-if="dropdown.statusMenu">
-                                <li class="text-xs font-semibold p-2 cursor-pointer hover:bg-blue-500 hover:text-white" v-for="status in statuses" :key="status.id" 
-                                @click="placeholder.placeholder_status = status.name,added_status.name = status.name,added_status.id = status.id">{{ status.name }}</li>
+                                <li class="text-xs font-semibold p-2 cursor-pointer hover:bg-blue-500 hover:text-white" v-for="available_status in available_statuses" :key="available_status.id" 
+                                @click="placeholder.placeholder_status = available_status.name,added_status.name = available_status.name,added_status.id = available_status.id">{{ available_status.name }}</li>
                             </ul>
                         </transition>
                     </div>
@@ -146,13 +151,18 @@ import { useAttendingStore } from '../../stores/attending.js';
 
 export default ({
     components: {PageSlot: PageSlotVue},
+    props: {id:  Number},
     data() {
         return {
             type: "Add new attending",
+            isLoading: true,
 
-            requests: {},
+            requests: [{}],
 
-            statuses: {},
+            statuses: [{}],
+
+            available_requests: [],
+            available_statuses: [],
 
             placeholder: {
                 placeholder_request: "Choose request",
@@ -178,6 +188,7 @@ export default ({
 
             payload: {
                 name: null,
+                id: null,
                 requests:[],
                 status: []
             },
@@ -202,7 +213,7 @@ export default ({
     methods: {
         ...mapActions(useRequestStore,['getAllRequests']),
         ...mapActions(useStatusestore,['getAllStatuses']),
-        ...mapActions(useAttendingStore,['upsertAttending']),
+        ...mapActions(useAttendingStore,['upsertAttending','getAttending']),
 
         addRequest() {
             this.loading.add = true;
@@ -227,17 +238,16 @@ export default ({
         AddNewRequest() {
 
             if ( this.added_request.id && this.added_request.value ) {
-                let request_index = this.requests.findIndex(x => x.id == this.added_request.id);
-                this.requests.splice(request_index,1);
+                let request_index = this.available_requests.findIndex(x => x.id == this.added_request.id);
+                this.available_requests.splice(request_index,1);
                 this.appended_requests.push({
                     id: this.added_request.id,
                     type: this.added_request.type,
                     value: this.added_request.value,
                     name: this.added_request.name
                 });
-
+                console.log(this.appended_requests)
                 this.payload.requests.push({request_id: this.added_request.id , value: this.added_request.value});
-                
                 this.added_request = {
                     type: null,
                     value: null,
@@ -249,7 +259,6 @@ export default ({
                 this.error.request_name = false;
                 this.error.request_value = false;
             } else {
-                
                 if (  ! this.added_request.id  ) {
                     this.error.request_name = true;
                 }
@@ -265,16 +274,23 @@ export default ({
             this.statuses.splice(status_index,1);
             if( this.added_status.id ) {
 
+                let status_index = this.available_statuses.findIndex(x => x.id == this.added_status.id);
+                this.available_statuses.splice(status_index,1);
                 this.appended_statuses.push({
                     id: this.added_status.id,
+                    type: this.added_status.type,
+                    value: this.added_status.value,
                     name: this.added_status.name
                 });
 
                 this.payload.status.push(this.added_status.id);
+                this.added_status = {
+                    name: null,
+                    id: null
+                },
 
+                this.placeholder.placeholder_status = "Choose statuse";
                 this.error.status_name = false;
-                this.placeholder.placeholder_status = "Choose status";
-
             } else {
 
                 this.error.status_name = true;
@@ -286,7 +302,7 @@ export default ({
             let getIndex = this.appended_requests.findIndex(x => x.id == index);
             let payloadIndex = this.payload.requests.findIndex(x => x.id == index);
             let spliced_request =  this.appended_requests.splice(getIndex,1);
-            this.requests.push({id: spliced_request[0].id,type: spliced_request[0].type,name: spliced_request[0].name});
+            this.available_requests.push({id: spliced_request[0].id,requestType: {type: spliced_request[0].type},name: spliced_request[0].name});
             this.payload.requests.splice(payloadIndex,1);
             this.requests.sort(function(a,b){
                 return a.id - b.id;
@@ -297,14 +313,23 @@ export default ({
             let getIndex = this.appended_statuses.findIndex(x => x.id == index);
             let payloadIndex = this.payload.status.findIndex(x => x.id == index);
             let spliced_status =  this.appended_statuses.splice(getIndex,1);
-            this.statuses.push({id: spliced_status[0].id,type: spliced_status[0].type,name: spliced_status[0].name});
+            this.available_statuses.push({id: spliced_status[0].id,name: spliced_status[0].name});
             this.payload.status.splice(payloadIndex,1);
             this.statuses.sort(function(a,b){
                 return a.id - b.id;
             });
         },
-
+        isRequestExist(index) {
+            this.payload.requests.findIndex(x => x.id == index);
+            
+            if ( index > -1 ) {
+                return true;
+            } else {
+                return false;
+            }
+        },
         saveProfile() {
+            this.error_display.profile_name = '';
             this.upsertAttending(this.payload).then((response) => {
                 this.loading = false;
                 let errors = response.data.errors;
@@ -317,16 +342,60 @@ export default ({
                     this.$router.push({name: "attending"});
                 }
             });
-        }
+        },
     },
+
     mounted() {
-        this.getAllRequests().then((response) => {
-            this.requests = response.data.data.requestall;
-            this.getAllStatuses().then((response) => {
-                this.statuses = response.data.data.statusesall;
-                console.log(this.statuses)
+        if ( this.$route.params.id ) {
+            this.payload.id = this.$route.params.id;
+            this.getAttending(this.payload).then((response) => {
+                this.isLoading = false;
+                let attending = response.data.data.attending
+                let status = attending.status;
+                let requests = attending.requests;
+                this.payload.name = attending.name; 
+                this.payload.id = attending.id;
+                status.forEach((item) => {
+                    this.payload.status.push(item.id);
+                    this.appended_statuses.push({id: item.id,name: item.name});
+                });
+                requests.forEach((item) => {
+                    this.payload.requests.push({request_id: item.id,value: item.pivot.value});
+                    this.appended_requests.push({id: item.id,name: item.name,type: item.requestType.type,value: item.pivot.value});
+                });
+
+                this.getAllStatuses().then((response) => {
+                    this.statuses = response.data.data.statusesall;
+                    this.statuses.forEach((item) => {
+                        let status_index = this.payload.status.indexOf(item.id);
+                        if ( status_index == -1 ) {
+                            let req_index = this.statuses.find(function (x) { return x.id == item.id });
+                            this.available_statuses.push(req_index)
+                        }
+                    })
+                });
+
+                this.getAllRequests().then((response) => {
+                    this.requests= response.data.data.requestall;
+                    this.requests.forEach((item) => {
+                        let request_index = this.payload.requests.findIndex(x=> x.request_id == item.id);
+                        if ( request_index == -1 ) {
+                            let req_index = this.requests.find(function (x) { return x.id == item.id });
+                            this.available_requests.push(req_index)
+                        }
+                    })
+                });
+
             });
-        });
+        } else {
+            this.isLoading = false;
+            this.getAllRequests().then((response) => {
+                this.available_requests = response.data.data.requestall;
+            });
+            this.getAllStatuses().then((response) => {
+                this.available_statuses = response.data.data.statusesall;
+            });
+        }
     }
 })
 </script>

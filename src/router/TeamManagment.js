@@ -65,7 +65,7 @@ let teamRoutes = [
         meta: {requiredAuth: true}
     },
     {
-        path: "/attending/upsert",
+        path: "/attending/upsert/:id?",
         name: "upsert_attending",
         component: AttendingUpsert,
         meta: {requiredAuth: true}

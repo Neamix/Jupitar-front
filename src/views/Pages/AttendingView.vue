@@ -15,12 +15,14 @@
             </div>
             <div class=" grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full py-3 grid" v-if="!this.attending_loader">
                 <div class="attending bg-white dark:text-white dark:bg-dark-300 shadow-sm rounded-md p-3 m-1" v-for="attending in attendings" :key="attending.id">
-                    <div class="attending_info cursor-pointer"  @click="updateAttending(attending.id)">
+                    <div class="attending_info">
                         <h4 class="text-xs font-semibold ">{{ attending.name }}</h4>
                         <div class="attending info text-xs font-semibold text-gray-600 flex">
                             <div class="attending_keys ml-auto">
-                                <span class="text-us pr-2" @click.stop="model.update_attending = true;editAttendingPayload.id=attending.id">
-                                    <i class="fa-solid fa-pen"></i>
+                                <span class="text-us pr-2">
+                                    <router-link :to="{name: 'upsert_attending',params:{id: attending.id}}">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </router-link>
                                 </span>
                                 <span class="text-us pr-2" @click.stop="model.delete_attending = true;deleteAttendingPayload.id=attending.id">
                                     <i class="fa-solid fa-trash"></i>

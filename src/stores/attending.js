@@ -22,11 +22,23 @@ export const useAttendingStore = defineStore('attending', {
                     query: `
                     query {
                         attending(id:${payload.id}) {
-                           name,
-                           attendingType {
-                                type,
-                                id
-                          }
+                            id,
+                            name,
+                            requests {
+                                id,
+                                name,
+                                requestType {
+                                    type,
+                                    id
+                                },
+                                pivot {
+                                    value
+                                }
+                            },
+                            status {
+                               id,
+                               name
+                            }
                         }
                     }
                     `
@@ -83,7 +95,8 @@ export const useAttendingStore = defineStore('attending', {
                     variables: {
                         requests: payload.requests,
                         name: payload.name,
-                        status: payload.status
+                        status: payload.status,
+                        id: payload.id
                     }
                 }
             })
