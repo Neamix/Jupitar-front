@@ -10,7 +10,7 @@
                     </p>
                 </div>
                 <div class="form-group w-full my-4">
-                    <input type="password" placeholder="Confirm your password" class="w-full border-0  bg-gray-200 rounded-sm text-xs font-semibold" v-model="payload.password"/>
+                    <input type="password" placeholder="Confirm your password" class="w-full border-0  bg-gray-200 input rounded-sm text-xs font-semibold" v-model="payload.password"/>
                     <p class="error">{{ error.deletePassword }}</p>
                     <p class="error">{{ error.deleteId }}</p>
                 </div>
@@ -21,7 +21,7 @@
                         Cancel
                     </button>
                     <button 
-                    @click="removeRequest();"
+                    @click="removeAttending();"
                     class=" flex relative justify-center items-center border-0 bg-red-600 hover:bg-red-500 transition-all  text-white text-us font-semibold px-6  py-1 rounded-sm">
                         <span>Confirm</span>
                         <svg 
@@ -44,16 +44,16 @@
 <script lang="ts">
 import { mapActions } from 'pinia';
 import { useGuardStore } from '../../../stores/Guard';
-import { useRequestStore } from '../../../stores/request';
+import { useAttendingStore } from '../../../stores/attending';
 export default {
     props: {
-        request_id: Number,
+        attending_id: Number,
         search: Array
     },
 
     data() {
         return {
-            requests: [],
+            attendings: [],
             loading: {
                 delete: false
             },
@@ -71,16 +71,15 @@ export default {
     },
 
     methods: {
-        ...mapActions(useRequestStore,['deleteRequest']),
-        removeRequest() {
+        ...mapActions(useAttendingStore,['deleteAttending']),
+        removeAttending() {
             this.loading.delete = true;
             this.error = {
                 deleteId: null,
                 deletePassword: null
             }
-            console.log(this.search)
 
-            this.deleteRequest(this.payload,this.search).then((response) => {
+            this.deleteAttending(this.payload,this.search).then((response) => {
                 let errors = response.data.errors;
                 if ( errors ) {
                     let passwordError = errors[0].extensions.validation['password'];
@@ -106,14 +105,13 @@ export default {
                 id: null,
                 password: null
             }
-
-            this.$emit("close","request_delete");
+            alert('close model');
+            this.$emit("close","attending_delete");
         }
     },
 
     mounted() {
-       this.payload.id = this.request_id;
-       console.log(this.search)
+       this.payload.id = this.attending_id;
     }
 }
 </script>

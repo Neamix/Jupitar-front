@@ -103,8 +103,6 @@ export const useAttendingStore = defineStore('attending', {
         },
 
         deleteAttending(payload,search) {
-            console.log(search)
-            console.log(search.name)
             return axios({
                 method: "POST",
                 url: import.meta.env.VITE_APP_END_POINT+'/graphql',
@@ -123,10 +121,6 @@ export const useAttendingStore = defineStore('attending', {
                                 data {
                                     id,
                                     name,
-                                    attendingType {
-                                        id,
-                                        type
-                                    }
                                 }
                             }
                         }

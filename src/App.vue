@@ -1,7 +1,7 @@
 <template>
     <router-view></router-view>
     <Transition name="fade">
-      <Loading v-if="fetch"></Loading>
+      <Loading v-if="true"></Loading>
     </Transition>
 </template>
 

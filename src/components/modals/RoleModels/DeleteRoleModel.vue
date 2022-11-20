@@ -104,7 +104,6 @@ export default {
                 id: null,
                 password: null
             }
-
             this.$emit("close","role_delete");
         }
     },

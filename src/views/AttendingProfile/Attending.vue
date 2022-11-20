@@ -299,11 +299,13 @@ export default ({
         },
 
         RemoveRequest(index) {
+            console.log(this.appended_requests)
             let getIndex = this.appended_requests.findIndex(x => x.id == index);
-            let payloadIndex = this.payload.requests.findIndex(x => x.id == index);
+            let payloadIndex = this.payload.requests.findIndex(x => x.request_id == index);
             let spliced_request =  this.appended_requests.splice(getIndex,1);
             this.available_requests.push({id: spliced_request[0].id,requestType: {type: spliced_request[0].type},name: spliced_request[0].name});
             this.payload.requests.splice(payloadIndex,1);
+            console.log(payloadIndex,this.payload.requests);
             this.requests.sort(function(a,b){
                 return a.id - b.id;
             });

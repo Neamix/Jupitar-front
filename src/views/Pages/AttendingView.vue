@@ -24,7 +24,7 @@
                                         <i class="fa-solid fa-pen"></i>
                                     </router-link>
                                 </span>
-                                <span class="text-us pr-2" @click.stop="model.delete_attending = true;deleteAttendingPayload.id=attending.id">
+                                <span class="text-us pr-2 cursor-pointer " @click.stop="model.delete_attending = true;deleteAttendingPayload.id=attending.id">
                                     <i class="fa-solid fa-trash"></i>
                                 </span>
                             </div>
@@ -82,10 +82,6 @@ export default {
                 update_attending: false,
                 delete_attending: false,
             },
-
-            alert() {
-                this.alert('hello')
-            },
             
             error: {
                 id: null,
@@ -131,6 +127,7 @@ export default {
 
         closeModels($model)
         {
+            console.log($model);
             if ( $model == 'new_attending_model' ) {
                 this.model.new_attending = false;
             } 
@@ -141,8 +138,10 @@ export default {
 
             if ( $model == 'attending_delete' ) {
                 this.model.delete_attending = false;
+                console.log(this.model.delete_attending)
             }
         },
+
 
         searchBy()
         {
@@ -161,7 +160,7 @@ export default {
         },
 
         removedAttending(response) {
-            this.model = false;
+            this.model.delete_attending = false;
             this.attendings = response.data.data.attendingdelete.attendings.data;
         }
     },

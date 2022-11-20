@@ -1,6 +1,6 @@
 <template>
     <nav class="navbar bg-white dark:bg-dark-300  main w-full px-4 flex items-center z-2000 ">
-        <LogoComponents class="hidden lg:block"></LogoComponents>
+        <LogoComponents class="hidden lg:block" :dark="dark"></LogoComponents>
         <!-- Start:Menu Key -->
         <div class="menu px-4 cursor-pointer" @click="toggleSideNav()">
             <svg viewBox="64 64 896 896" focusable="false" data-icon="menu-fold" width="1em" height="1em" fill="#5e5e5e"

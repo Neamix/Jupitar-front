@@ -97,6 +97,19 @@ aside i {
     @apply dark:text-white
 }
 
+aside svg {
+    @apply dark:fill-white
+}
+
+aside a:hover span,
+aside a:hover i {
+    @apply text-blue-400
+}
+
+aside a:hover svg {
+    @apply fill-blue-400
+}
+
 @media screen and (max-width:896px) {
     aside.collapse~.page {
         margin-left: 0px;
@@ -171,7 +184,14 @@ aside i {
     height: 30px;
     @apply rounded-full;
 }
+/* Models */
+.modal {
+    @apply dark:bg-dark-200 dark:text-white
+}
 
+.active {
+    @apply bg-blue-500 text-white
+}
 /* Transitions */
 .profile-enter-active
 .profile-leave-active {
@@ -238,6 +258,7 @@ aside i {
     background-image: url("../assets/img/layers/auth_layer.jpg");
     background-position: center;
     background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .auth .panal {
@@ -518,6 +539,7 @@ background: #555;
     left: 0;
     max-height: 114px;
     overflow-y: scroll;
+    @apply dark:bg-dark-300 cursor-pointer
 }
 
 /* overview  */
